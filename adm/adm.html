@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Biblioteca Pandora</title>
+
+    <link rel="stylesheet" href="../asset/style/adm.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="dashboard-container">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="sidebar-header">
+                <div class="logo">
+
+                    <img src="../asset/icones/book-open.svg" class="icon logo-icon" alt="Logo">
+
+                    <div class="logo-text">
+                        <span>Pandora</span>
+                        <small>Sistema de Gestão</small>
+                    </div>
+
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+
+                <a href="#" class="nav-item active">
+                    <img src="../asset/icones/home.svg" class="icon" alt="">
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/book-open.svg" class="icon" alt="">
+                    <span>Livros</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/user.svg" class="icon" alt="">
+                    <span>Autores</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/folder.svg" class="icon" alt="">
+                    <span>Categorias</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/users.svg" class="icon" alt="">
+                    <span>Usuários</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/arrow-right-left.svg" class="icon" alt="">
+                    <span>Empréstimos</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/rotate-ccw.svg" class="icon" alt="">
+                    <span>Devoluções</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/calendar.svg" class="icon" alt="">
+                    <span>Reservas</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/file-text.svg" class="icon" alt="">
+                    <span>Relatórios</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <img src="../asset/icones/settings.svg" class="icon" alt="">
+                    <span>Configurações</span>
+                </a>
+
+            </nav>
+
+            <!-- FOOTER -->
+            <div class="sidebar-footer">
+
+                <div class="user-profile">
+
+                    <div class="avatar">
+                        <img src="../asset/icones/user.svg" class="icon white-icon" alt="">
+                    </div>
+
+                    <div class="user-info">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-email">admin@pandora.com</span>
+                    </div>
+
+                    <img src="../asset/icones/chevron-down.svg" class="icon dropdown-icon" alt="">
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- MAIN -->
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div class="welcome-text">
+                    <h1>Olá, Administrador 👋</h1>
+                    <p>Bem-vindo ao sistema de gestão da biblioteca.</p>
+                </div>
+
+                <div class="topbar-actions">
+
+                    <div class="search-bar">
+
+                        <img src="../asset/icones/search.svg" class="icon" alt="">
+
+                        <input type="text" placeholder="Buscar livros...">
+
+                    </div>
+
+                    <button class="action-btn">
+
+                        <img src="../asset/icones/bell.svg" class="icon" alt="">
+
+                        <span class="badge">3</span>
+
+                    </button>
+
+                    <button class="action-btn">
+                        <img src="../asset/icones/settings.svg" class="icon" alt="">
+                    </button>
+
+                </div>
+
+            </header>
+
+            <!-- KPI -->
+            <div class="kpi-grid">
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon blue">
+                        <img src="../asset/icones/book-copy.svg" class="icon big-icon" alt="">
+                    </div>
+
+                    <div class="kpi-details">
+                        <span class="kpi-title">Total de Livros</span>
+                        <span class="kpi-value">1.248</span>
+                        <span class="kpi-trend positive">+32 este mês</span>
+                    </div>
+
+                </div>
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon green">
+                        <img src="../asset/icones/users.svg" class="icon big-icon" alt="">
+                    </div>
+
+                    <div class="kpi-details">
+                        <span class="kpi-title">Leitores Ativos</span>
+                        <span class="kpi-value">532</span>
+                        <span class="kpi-trend positive">+18 este mês</span>
+                    </div>
+
+                </div>
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon orange">
+                        <img src="../asset/icones/arrow-right-left.svg" class="icon big-icon" alt="">
+                    </div>
+
+                    <div class="kpi-details">
+                        <span class="kpi-title">Empréstimos</span>
+                        <span class="kpi-value">231</span>
+                        <span class="kpi-trend positive">+12 este mês</span>
+                    </div>
+
+                </div>
+
+                <div class="kpi-card">
+
+                    <div class="kpi-icon red">
+                        <img src="../asset/icones/calendar.svg" class="icon big-icon" alt="">
+                    </div>
+
+                    <div class="kpi-details">
+                        <span class="kpi-title">Reservas</span>
+                        <span class="kpi-value">77</span>
+                        <span class="kpi-trend positive">+7 este mês</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

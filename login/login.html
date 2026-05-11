@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Biblioteca</title>
+    <link rel="stylesheet" href="../asset/style/login.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LADO ESQUERDO -->
+    <div class="left">
+        <div class="overlay">
+            <div class="content">
+                <a href="../home/index.html" title="Ir para a página inicial">
+                    <img class="book-icon" src="../asset/icones/livro-aberto.svg" alt="Livro">
+                </a>
+                <h2>Bem-vindo ao<br> Sistema Pandora</h2>
+                <p>Gerencie acervos, usuários, empréstimos e muito mais de forma prática e eficiente.</p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- LADO DIREITO -->
+    <div class="right">
+        <div class="card">
+            <div class="card-header">
+                <img class="card-icon" src="../asset/icones/livro-aberto.svg" alt="Livro">
+                <h1>Entrar na sua conta</h1>
+                <p>Acesse o sistema de gestão da biblioteca</p>
+            </div>
+ 
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <div class="input-with-icon">
+                        <img class="input-icon" src="../asset/icones/mail.svg" alt="E-mail">
+                        <input type="email" id="email" placeholder="Digite seu e-mail" required>
+                    </div>
+                </div>
+                 
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <div class="password-field input-with-icon">
+                        <img class="input-icon" src="../asset/icones/lock.svg" alt="Senha">
+                        <input type="password" id="password" placeholder="Digite sua senha" required>
+                        <button type="button" id="togglePassword" class="toggle-btn">
+                            <img src="../asset/icones/eye.svg" id="eyeIcon" style="display: none;" alt="Mostrar">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="options">
+                    <label class="checkbox-label">
+                        <input type="checkbox"> Lembrar de mim
+                    </label>
+                    <a href="#" class="forgot-password">Esqueceu sua senha?</a>
+                </div>
+
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+        </div>
+
+        <footer class="login-footer">
+            © 2026 Sistema de Biblioteca. Todos os direitos reservados.
+        </footer>
+    </div>
+
+</div>
+
+<script src="../asset/js/login.js"></script>
+</body>
+</html>
