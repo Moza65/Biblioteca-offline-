@@ -1,14 +1,15 @@
 
 <?php
-
+// Inicia a sessão
 session_start();
-
+// Verifica se existe usuário logado
 if (!isset($_SESSION['usuario'])) {
-
+    // Se não existir sessão, volta para login
     header("Location: ../login/login.php");
+      // Encerra o script para evitar que o código abaixo seja executado
     exit();
 }
-
+// Guarda os dados do usuário logado
 $usuario = $_SESSION['usuario'];
 
 ?>
@@ -106,13 +107,13 @@ $usuario = $_SESSION['usuario'];
                     <div class="avatar">
                         <img src="../asset/icones/user.svg" class="icon white-icon" alt="">
                     </div>
-                    
-<div class="user-info">
 
+<div class="user-info">
+<!-- Mostra o nome do usuário logado -->
     <span class="user-name">
         <?php echo $usuario['email']; ?>
     </span>
-
+<!-- Mostra o email do usuário logado -->
     <span class="user-email">
         <?php echo $usuario['email']; ?>
     </span>

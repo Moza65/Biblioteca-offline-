@@ -32,15 +32,15 @@
                 <h1>Entrar na sua conta</h1>
                 <p>Acesse o sistema de gestão da biblioteca</p>
             </div>
- 
+ <!-- Formulário de login -->
             <form id="loginForm" action="validar_login.php" method="POST">
-
+ <!-- Campo de email -->
     <div class="form-group">
         <label for="email">E-mail</label>
-
+<!-- Ícone do email -->
         <div class="input-with-icon">
             <img class="input-icon" src="../asset/icones/mail.svg" alt="E-mail">
-
+<!-- Campo para digitar email -->
             <input 
                 type="email" 
                 id="email"
@@ -64,13 +64,13 @@
                 placeholder="Digite sua senha" 
                 required
             >
-
+<!-- Botão para mostrar/esconder senha -->
             <button type="button" id="togglePassword" class="toggle-btn">
                 <img src="../asset/icones/eye.svg" id="eyeIcon" style="display: none;" alt="Mostrar">
             </button>
         </div>
     </div>
-
+ <!-- Botão de login -->
     <button type="submit" class="btn-primary">
         Entrar
     </button>
