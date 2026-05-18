@@ -19,5 +19,5 @@ try {
 // Captura erros caso a conexão falhe
 } catch (PDOException $e) {
 // Mostra a mensagem de erro
-    echo "Erro na conexão: " . $e->getMessage();
+    echo "Erro na conexão: ".$e->getMessage();
 }
