@@ -1,3 +1,18 @@
+
+<?php
+
+session_start();
+
+if (!isset($_SESSION['usuario'])) {
+
+    header("Location: ../login/login.php");
+    exit();
+}
+
+$usuario = $_SESSION['usuario'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -10,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-''
+    
     <div class="dashboard-container">
 
         <!-- SIDEBAR -->
@@ -91,11 +106,18 @@
                     <div class="avatar">
                         <img src="../asset/icones/user.svg" class="icon white-icon" alt="">
                     </div>
+                    
+<div class="user-info">
 
-                    <div class="user-info">
-                        <span class="user-name">Administrador</span>
-                        <span class="user-email">admin@pandora.com</span>
-                    </div>
+    <span class="user-name">
+        <?php echo $usuario['email']; ?>
+    </span>
+
+    <span class="user-email">
+        <?php echo $usuario['email']; ?>
+    </span>
+
+</div>
 
                     <img src="../asset/icones/chevron-down.svg" class="icon dropdown-icon" alt="">
 
