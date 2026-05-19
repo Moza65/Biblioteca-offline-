@@ -6,6 +6,7 @@
     <title>Login - Sistema de Biblioteca</title>
     <link rel="stylesheet" href="../asset/style/login.css">
 </head>
+
 <body>
 
 <div class="container">
@@ -85,5 +86,25 @@
 </div>
 
 <script src="../asset/js/login.js"></script>
+
+<?php if (isset($_GET['erro'])) : ?>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+
+Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: 'Email ou senha incorretos!',
+    confirmButtonColor: '#7a4006'
+});
+
+</script>
+
+<?php endif; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 </html>

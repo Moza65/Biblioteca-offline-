@@ -28,7 +28,7 @@ if ($usuario) {
     
         // Mostra mensagem de erro caso login falhe
 
-    echo "Email ou senha incorretos";
-
+  header("Location: login.php?erro=1");
+    exit();
 }
 ?>
