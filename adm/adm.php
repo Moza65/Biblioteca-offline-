@@ -1,5 +1,12 @@
 
 <?php
+require_once "../Buscas/buscarDados.php";
+$callClass = new BuscarDados();
+$put = ($callClass->QuantidadeLivro());
+$putEmprestimo = ($callClass->Quantidadeemprestimo());
+$putLeitores = ($callClass->QuantidadeLeitores());
+$putReserva = ($callClass->QuantidadeReserva());
+
 // Inicia a sessão
 session_start();
 // Verifica se existe usuário logado
@@ -134,7 +141,7 @@ $usuario = $_SESSION['usuario'];
             <header class="topbar">
 
                 <div class="welcome-text">
-                    <h1>Olá, Administrador 👋</h1>
+                    <h1>Olá, Administrador   👋</h1>
                     <p>Bem-vindo ao sistema de gestão da biblioteca.</p>
                 </div>
 
@@ -175,7 +182,7 @@ $usuario = $_SESSION['usuario'];
 
                     <div class="kpi-details">
                         <span class="kpi-title">Total de Livros</span>
-                        <span class="kpi-value">1.248</span>
+                        <span class="kpi-value"><?php if(isset($put) and is_array($put)){ echo $put["count(id_livro)"]; } ?> </span>
                         <span class="kpi-trend positive">+32 este mês</span>
                     </div>
 
@@ -189,7 +196,7 @@ $usuario = $_SESSION['usuario'];
 
                     <div class="kpi-details">
                         <span class="kpi-title">Leitores Ativos</span>
-                        <span class="kpi-value">532</span>
+                        <span class="kpi-value"><?php if(isset($putLeitores) and is_array($putLeitores)){ echo $putLeitores["count(id)"]; } ?></span>
                         <span class="kpi-trend positive">+18 este mês</span>
                     </div>
 
@@ -203,7 +210,7 @@ $usuario = $_SESSION['usuario'];
 
                     <div class="kpi-details">
                         <span class="kpi-title">Empréstimos</span>
-                        <span class="kpi-value">231</span>
+                        <span class="kpi-value"><?php if(isset($putEmprestimo) and is_array($putEmprestimo)){ echo $putEmprestimo["count(id_emprestimo)"]; } ?></span>
                         <span class="kpi-trend positive">+12 este mês</span>
                     </div>
 
@@ -217,8 +224,8 @@ $usuario = $_SESSION['usuario'];
 
                     <div class="kpi-details">
                         <span class="kpi-title">Reservas</span>
-                        <span class="kpi-value">77</span>
-                        <span class="kpi-trend positive">+7 este mês</span>
+                        <span class="kpi-value"><?php if(isset($putReserva) and is_array($putReserva)){ echo $putReserva["count(id_reserva)"]; } ?> </span>
+                        <span class="kpi-trend positive">+2 este mês</span>
                     </div>
 
                 </div>

@@ -8,7 +8,7 @@ try {
         // port=3307 -> porta do MySQL
         // dbname=biblioteca -> nome do banco
         // charset=utf8mb4 -> suporta acentos e caracteres especiais
-        "mysql:host=localhost;port=3307;dbname=biblioteca;charset=utf8mb4",
+        "mysql:host=localhost;port=3306;dbname=bd_biblioteca;charset=utf8mb4",
          // Usuário do MySQL
         "root",
         // Senha do MySQL

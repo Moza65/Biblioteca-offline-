@@ -2,7 +2,7 @@
 // Inicia a sessão do usuário
 session_start();
 // Importa a conexão com o banco de dados
-require '../config.php';
+require_once '../config.php';
 // Recebe os dados enviados pelo formulário
 $email = $_POST['email'];
 $senha = $_POST['senha'];
