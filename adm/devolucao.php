@@ -26,11 +26,12 @@ $devolvidos = $gerenciador->listarDevolvidos();
     <link rel="stylesheet" href="../asset/style/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .devolucao-table, .devolucao-table th, .devolucao-table td { width: 100%; border-collapse: collapse; }
-        .devolucao-table th { background: #f3f4f6; padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb; }
-        .devolucao-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
+        .devolucao-table{margin: auto;width:  100%; }
+        .devolucao-table, .devolucao-table th, .devolucao-table td { border-collapse: collapse; }
+        .devolucao-table th { background: #f3f4f6; padding: 12px;  text-align: center; border-bottom: 2px solid #e5e7eb; }
+        .devolucao-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: center; }
         .devolucao-table tr:hover { background: #f9fafb; }
-        .status { padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; display: inline-block; }
+        .status {  border-radius: 999px; font-size: 12px; font-weight: 700; display: inline-block; }
         .status.pendente { background: #fef3c7; color: #92400e; }
         .status.devolvido { background: #d1fae5; color: #065f46; }
         .btn-action { padding: 8px 14px; border: none; border-radius: 8px; cursor: pointer; color: white; background: #10b981; }
@@ -61,7 +62,7 @@ $devolvidos = $gerenciador->listarDevolvidos();
                 <table class="devolucao-table" style="margin-top: 16px;">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th hidden>ID</th>
                             <th>Leitor</th>
                             <th>Livro</th>
                             <th>Empréstimo</th>
@@ -74,7 +75,7 @@ $devolvidos = $gerenciador->listarDevolvidos();
                         <?php if (count($pendentes) > 0): ?>
                             <?php foreach ($pendentes as $item): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
+                                    <td hidden><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
                                     <td><?php echo htmlspecialchars($item['leitor']); ?></td>
                                     <td><?php echo htmlspecialchars($item['titulo_livro']); ?></td>
                                     <td><?php echo date('d/m/Y', strtotime($item['data_emprestimo'])); ?></td>
@@ -103,10 +104,10 @@ $devolvidos = $gerenciador->listarDevolvidos();
                 <table class="devolucao-table" style="margin-top: 16px;">
                     <thead>
                         <tr>
-                            <th>ID Empréstimo</th>
+                            <th hidden>ID Empréstimo</th>
                             <th>Leitor</th>
-                            <th>Livro</th>
-                            <th>Data de Devolução</th>
+                            <th >Livro</th>
+                            <th>Devolução</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -114,7 +115,7 @@ $devolvidos = $gerenciador->listarDevolvidos();
                         <?php if (count($devolvidos) > 0): ?>
                             <?php foreach ($devolvidos as $item): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
+                                    <td hidden><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
                                     <td><?php echo htmlspecialchars($item['leitor']); ?></td>
                                     <td><?php echo htmlspecialchars($item['titulo_livro']); ?></td>
                                     <td><?php echo date('d/m/Y', strtotime($item['data_devolucao'])); ?></td>
