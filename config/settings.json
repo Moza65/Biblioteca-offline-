@@ -1,0 +1,7 @@
+{
+  "library_name": "Pandora Biblioteca",
+  "contact_email": "contato@pandora.local",
+  "opening_hours": "Seg-Sex 08:00-18:00",
+  "default_loan_days": 7,
+  "fine_per_day": 0.50
+}
