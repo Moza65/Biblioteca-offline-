@@ -22,8 +22,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             ['file' => 'livros.php', 'icon' => 'book-open.svg', 'label' => 'Livros'],
             ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Usuários'],
             ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
+<<<<<<< HEAD
             ['file' => 'devolucao.php', 'icon' => 'devolucao.svg', 'label' => 'Devolução'],
             ['file' => 'reservas.php', 'icon' => 'reservas.svg', 'label' => 'Reservas'],
+=======
+            ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
+            ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
+>>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
             ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
             ['file' => 'configuracoes.php', 'icon' => 'settings.svg', 'label' => 'Configurações'],
             ['file' => 'logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],

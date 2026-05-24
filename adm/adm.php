@@ -20,7 +20,11 @@ $total_atrasados = 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Biblioteca Pandora</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
+=======
+    <link rel="stylesheet" href="../asset/style/adm.css">
+>>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
