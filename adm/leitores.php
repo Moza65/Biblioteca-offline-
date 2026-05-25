@@ -32,7 +32,7 @@ $total = count($leitores);
                 <header class="topbar">
                     <div class="welcome-text">
                         <div class="page-title-row">
-                            <img src="../asset/icones/usuarios.svg" alt="" class="page-title-icon">
+                            <img src="../asset/icones/user-cog.svg" alt="" class="page-title-icon">
                             <h1>Gerenciar Leitores</h1>
                         </div>
                         <p>Visualize todos os leitores cadastrados</p>
