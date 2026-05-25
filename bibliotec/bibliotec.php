@@ -60,9 +60,6 @@ $usuario = $_SESSION['usuario'];
                     <img src="../asset/icones/bell.svg" class="icon" alt="">
                     <span class="badge">3</span>
                 </button>
-                <button class="action-btn">
-                    <img src="../asset/icones/settings.svg" class="icon" alt="">
-                </button>
             </div>
         </header>
 
