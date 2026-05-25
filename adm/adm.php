@@ -59,7 +59,7 @@ $total_atrasados = 0;
                     <img src="../asset/icones/bell.svg" class="icon" alt="">
                     <span class="badge">3</span>
                 </button>
-                <button class="action-btn" onclick="window.location.href='config.php'">
+                <button class="action-btn" onclick="window.location.href='configuracoes.php'">
                     <img src="../asset/icones/settings.svg" class="icon" alt="">
                 </button>
             </div>
