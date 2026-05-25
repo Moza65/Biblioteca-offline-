@@ -1,4 +1,4 @@
-﻿<?php
+<<?php
 require_once "../Buscas/buscarDados.php";
 
 session_start();
@@ -10,7 +10,7 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 // Verifica se é bibliotecário
-if ($_SESSION['usuario']['tipo_usuario'] != 'admin') {
+if ($_SESSION['usuario']['tipo_usuario'] != 'bibliotecario') {
     header("Location: ../login/login.php");
     exit();
 }
@@ -33,33 +33,28 @@ if(isset($_POST["pesquisa"]) and !empty($_POST["campoPesquisa"])){
 
 $total_atrasados = 0;
 ?>
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Biblioteca Pandora</title>
+    <title>Painel do Bibliotecário</title>
     <link rel="stylesheet" href="../asset/style/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="dashboard-container">
-        <?php include 'sidebar.php'; ?>
+       <?php include 'sidebar.php'; ?>
         <main class="main-content">
             <header class="topbar">
                 <div class="welcome-text">
-                    <h1>Olá, Administrador 👋</h1>
+                    <h1> Olá, <?php echo $usuario['nome']; ?> </h1>
                     <p>Bem-vindo ao sistema de gestão da biblioteca.</p>
                 </div>
                 <div class="topbar-actions">
                     <div class="search-bar">
-                        <form action="" method="post" >
-                            <input type="text" name="campoPesquisa" placeholder="Buscar livros...">
-                            <button name="pesquisar" type="submit">
-                                <img src="../asset/icones/search.svg" class="icon" alt="">
-                            </button> 
-                        </form>
+                        <img src="../asset/icones/search.svg" class="icon" alt="">
+                        <input type="text" placeholder="Buscar livros...">
                     </div>
                     <button class="action-btn">
                         <img src="../asset/icones/bell.svg" class="icon" alt="">
@@ -123,62 +118,8 @@ $total_atrasados = 0;
                 </div>
             </div>
             <?php endif; ?>
-            <?php
-            if(isset($pesquisaEncontrada) and !empty($pesquisaEncontrada) and is_array($pesquisaEncontrada)){
-                if(isset($pesquisaEncontrada["0"]["id_emprestimo"])){ ?>
-                    //AQUÍ O USUÁRIO PESQUISOU EMPRÉSTIMO
-                    <h2>Informações da pesquisa </h2>
-                    <table class="emprestimos-table">
-                <thead>
-                    <tr>
-                        <th hidden>ID</th>
-                        <th>Livro</th>
-                        <th>Leitor</th>
-                        <th>Livro</th>
-                        <th>Livro</th>
-                        <th>Livro</th>
-                        <th>Livro</th>
-                        <th>Data do Empréstimo</th>
-                        <th>Previsão de Devolução</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (count($pesquisaEncontrada) > 0): ?>
-                        <?php foreach ($pesquisaEncontrada as $emp): ?>
-                            <tr>
-                                <td hidden><?php echo htmlspecialchars($emp['id_emprestimo'] ?? '-'); ?></td>
-                                <td><?php echo htmlspecialchars($emp['titulo_livro'] ?? '-'); ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($emp['data_emprestimo'] ?? 'now')); ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($emp['data_prevista'] ?? 'now')); ?></td>
-                                <td>
-                                    <?php
-                                        if (!empty($emp['data_devolucao'])) {
-                                            $status = 'Devolvido';
-                                            $class_status = 'devolvido';
-                                        } elseif (strtotime($emp['data_prevista'] ?? 'now') < time()) {
-                                            $status = 'Atrasado';
-                                            $class_status = 'atrasado';
-                                        } else {
-                                            $status = !empty($emp['estado']) ? 'Ativo' : 'Pendente';
-                                            $class_status = strtolower($status);
-                                        }
-                                    ?>
-                                    <span class="status <?php echo $class_status; ?>"><?php echo htmlspecialchars($status); ?></span>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="5" style="text-align: center; padding: 30px;">Nenhum empréstimo registrado</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-               <?php }
-            }
-            ?>
         </main>
     </div>
 </body>
 </html>
+

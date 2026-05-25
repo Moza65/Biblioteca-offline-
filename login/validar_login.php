@@ -1,34 +1,50 @@
-<?php
+<?php 
 // Inicia a sessão do usuário
 session_start();
+
 // Importa a conexão com o banco de dados
 require_once '../config.php';
+
 // Recebe os dados enviados pelo formulário
 $email = $_POST['email'];
 $senha = $_POST['senha'];
-// Consulta SQL para procurar usuário com email e senha correspondentes
+
+// Consulta SQL
 $sql = "SELECT * FROM usuario 
 WHERE email = ? AND senha = ?";
-// Prepara a consulta SQL
+
+// Prepara a consulta
 $stmt = $pdo->prepare($sql);
-// Executa a consulta substituindo os ? pelos valores reais
+
+// Executa
 $stmt->execute([$email, $senha]);
-// Busca o usuário encontrado
+
+// Busca usuário
 $usuario = $stmt->fetch();
-// Verifica se encontrou usuário
+
+// Verifica se encontrou
 if ($usuario) {
- // Guarda os dados do usuário na sessão
+
+    // Guarda dados na sessão
     $_SESSION['usuario'] = $usuario;
- // Redireciona para o painel administrativo
-    header("Location: ../adm/adm.php");
-     // Encerra o script para evitar que o código abaixo seja executado
+
+    // Verifica tipo de usuário
+    if ($usuario['tipo_usuario'] == 'admin') {
+
+        header("Location: ../adm/adm.php");
+
+    } elseif ($usuario['tipo_usuario'] == 'bibliotecario') {
+
+        header("Location: ../bibliotec/bibliotec.php");
+
+    }
+
     exit();
 
 } else {
-    
-        // Mostra mensagem de erro caso login falhe
 
-  header("Location: login.php?erro=1");
+    // Login inválido
+    header("Location: login.php?erro=1");
     exit();
 }
 ?>
