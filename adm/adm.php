@@ -45,7 +45,7 @@ $total_atrasados = 0;
         <main class="main-content">
             <header class="topbar">
                 <div class="welcome-text">
-                    <h1>Olá, Administrador 👋</h1>
+                    <h1>Olá, Administrador</h1>
                     <p>Bem-vindo ao sistema de gestão da biblioteca.</p>
                 </div>
                 <div class="topbar-actions">
