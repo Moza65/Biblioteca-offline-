@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
@@ -16,22 +16,27 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
     <nav class="sidebar-nav">
         <?php
-        $items = [
-            ['file' => 'adm.php', 'icon' => 'home.svg', 'label' => 'Dashboard'],
-            ['file' => 'categorias.php', 'icon' => 'file-text.svg', 'label' => 'Categorias'],
-            ['file' => 'livros.php', 'icon' => 'book-open.svg', 'label' => 'Livros'],
-            ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Leitores'],
-            ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
+       $items = [
 
-           
-            ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
-            ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
+    ['file' => 'bibliotec.php', 'icon' => 'home.svg', 'label' => 'Dashboard'],
 
-            ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
-            ['file' => 'configuracoes.php', 'icon' => 'settings.svg', 'label' => 'Configurações'],
-            ['file' => 'logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
+    ['file' => 'categorias.php', 'icon' => 'file-text.svg', 'label' => 'Categorias'],
 
-        ];
+    ['file' => 'livros.php', 'icon' => 'book-open.svg', 'label' => 'Livros'],
+
+    ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Leitores'],
+
+    ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
+
+    ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
+
+    ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
+
+    ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
+
+    ['file' => 'logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
+
+];
 
         foreach ($items as $it) {
             $active = ($currentPage === $it['file']) ? 'nav-item active' : 'nav-item';
