@@ -30,11 +30,12 @@ html, body {
     --gray-500:#6E6259;
     --gray-800:#3E2A1F;
     --gray-900:#1E1E1E;
+    --yellow:#F2C14E;
 }
 
 body{
     font-family:'Inter',sans-serif;
-    background:var(--gray-50);
+    background:var(--yellow);
     color:var(--gray-900);
 }
 
