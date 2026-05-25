@@ -1,15 +1,14 @@
 ﻿<?php
-require_once "../Buscas/Gerenciadores.php";
+require_once __DIR__ . '/../Buscas/Gerenciadores.php';
 require_once __DIR__ . '/common.php';
-<<<<<<< HEAD
 
-$gerenciador           = new GerenciadorLivros();
+$gerenciador = new GerenciadorLivros();
 $gerenciadorCategorias = new GerenciadorCategorias();
-$categorias            = $gerenciadorCategorias->listarTodos();
-$mensagem              = '';
-$tipoAlerta            = '';
+$categorias = $gerenciadorCategorias->listarTodos();
+$mensagem = '';
+$tipoAlerta = '';
 
-$uploadDir    = __DIR__ . '/../uploads/capas';
+$uploadDir = __DIR__ . '/../uploads/capas';
 $uploadFolder = 'uploads/capas';
 if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
@@ -20,144 +19,52 @@ function salvarImagem($file, $uploadDir, $uploadFolder) {
     if ($imageInfo === false) throw new Exception('O arquivo enviado não é uma imagem válida.');
     $allowedTypes = [IMAGETYPE_JPEG=>'jpg', IMAGETYPE_PNG=>'png', IMAGETYPE_GIF=>'gif', IMAGETYPE_WEBP=>'webp'];
     if (!isset($allowedTypes[$imageInfo[2]])) throw new Exception('Formato inválido. Use JPG, PNG, GIF ou WEBP.');
-    $ext      = $allowedTypes[$imageInfo[2]];
-    $filename = uniqid('capa_', true) . '.' . $ext;
-    $dest     = $uploadDir . DIRECTORY_SEPARATOR . $filename;
-    if (!move_uploaded_file($file['tmp_name'], $dest)) throw new Exception('Falha ao salvar a imagem de capa.');
-=======
-$gerenciador = new GerenciadorLivros();
-$gerenciadorCategorias = new GerenciadorCategorias();
-$categorias = $gerenciadorCategorias->listarTodos();
-$mensagem = '';
-
-$uploadDir = __DIR__ . '/../uploads/capas';
-$uploadFolder = 'uploads/capas';
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0755, true);
-}
-
-function salvarImagem($file, $uploadDir, $uploadFolder) {
-    if (!isset($file) || $file['error'] === UPLOAD_ERR_NO_FILE) {
-        return null;
-    }
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        throw new Exception('Erro no envio da imagem.');
-    }
-
-    $imageInfo = getimagesize($file['tmp_name']);
-    if ($imageInfo === false) {
-        throw new Exception('O arquivo enviado não é uma imagem válida.');
-    }
-
-    $allowedTypes = [
-        IMAGETYPE_JPEG => 'jpg',
-        IMAGETYPE_PNG => 'png',
-        IMAGETYPE_GIF => 'gif',
-        IMAGETYPE_WEBP => 'webp',
-    ];
-
-    if (!isset($allowedTypes[$imageInfo[2]])) {
-        throw new Exception('Formato de imagem inválido. Use JPG, PNG, GIF ou WEBP.');
-    }
-
     $ext = $allowedTypes[$imageInfo[2]];
     $filename = uniqid('capa_', true) . '.' . $ext;
-    $destination = $uploadDir . DIRECTORY_SEPARATOR . $filename;
-
-    if (!move_uploaded_file($file['tmp_name'], $destination)) {
-        throw new Exception('Falha ao salvar a imagem de capa.');
-    }
-
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+    $dest = $uploadDir . DIRECTORY_SEPARATOR . $filename;
+    if (!move_uploaded_file($file['tmp_name'], $dest)) throw new Exception('Falha ao salvar a imagem de capa.');
     return $uploadFolder . '/' . $filename;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     try {
         $imagemPath = null;
-<<<<<<< HEAD
-        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] !== UPLOAD_ERR_NO_FILE)
-            $imagemPath = salvarImagem($_FILES['imagem'], $uploadDir, $uploadFolder);
-
-        if ($_POST['action'] === 'adicionar') {
-            $gerenciador->adicionar($_POST['titulo'], $_POST['autor'], $_POST['quantidade'], $_POST['editora'], $_POST['edicao'], $imagemPath, !empty($_POST['categoria']) ? $_POST['categoria'] : null);
-            $mensagem   = "Livro adicionado com sucesso!";
-            $tipoAlerta = 'sucesso';
-        } elseif ($_POST['action'] === 'deletar') {
-            $gerenciador->deletar($_POST['id_livro']);
-            $mensagem   = "Livro removido com sucesso!";
-            $tipoAlerta = 'sucesso';
-        } elseif ($_POST['action'] === 'atualizar') {
-            $gerenciador->atualizar($_POST['id_livro'], $_POST['titulo'], $_POST['autor'], $_POST['quantidade'], $_POST['editora'], $_POST['edicao'], $imagemPath, !empty($_POST['categoria']) ? $_POST['categoria'] : null);
-            $mensagem   = "Livro atualizado com sucesso!";
-            $tipoAlerta = 'sucesso';
-        }
-    } catch (Exception $e) {
-        $mensagem   = "Erro: " . $e->getMessage();
-        $tipoAlerta = 'erro';
-=======
         if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] !== UPLOAD_ERR_NO_FILE) {
             $imagemPath = salvarImagem($_FILES['imagem'], $uploadDir, $uploadFolder);
         }
 
         if ($_POST['action'] === 'adicionar') {
-            $gerenciador->adicionar(
-                $_POST['titulo'],
-                $_POST['autor'],
-                $_POST['quantidade'],
-                $_POST['editora'],
-                $_POST['edicao'],
-                $imagemPath,
-                !empty($_POST['categoria']) ? $_POST['categoria'] : null
-            );
-            $mensagem = "Livro adicionado com sucesso!";
+            $gerenciador->adicionar($_POST['titulo'], $_POST['autor'], $_POST['quantidade'], $_POST['editora'], $_POST['edicao'], $imagemPath, !empty($_POST['categoria']) ? $_POST['categoria'] : null);
+            $mensagem = 'Livro adicionado com sucesso!';
+            $tipoAlerta = 'sucesso';
         } elseif ($_POST['action'] === 'deletar') {
             $gerenciador->deletar($_POST['id_livro']);
-            $mensagem = "Livro removido com sucesso!";
+            $mensagem = 'Livro removido com sucesso!';
+            $tipoAlerta = 'sucesso';
         } elseif ($_POST['action'] === 'atualizar') {
-            $gerenciador->atualizar(
-                $_POST['id_livro'],
-                $_POST['titulo'],
-                $_POST['autor'],
-                $_POST['quantidade'],
-                $_POST['editora'],
-                $_POST['edicao'],
-                $imagemPath,
-                !empty($_POST['categoria']) ? $_POST['categoria'] : null
-            );
-            $mensagem = "Livro atualizado com sucesso!";
+            $gerenciador->atualizar($_POST['id_livro'], $_POST['titulo'], $_POST['autor'], $_POST['quantidade'], $_POST['editora'], $_POST['edicao'], $imagemPath, !empty($_POST['categoria']) ? $_POST['categoria'] : null);
+            $mensagem = 'Livro atualizado com sucesso!';
+            $tipoAlerta = 'sucesso';
         }
     } catch (Exception $e) {
-        $mensagem = "Erro: " . $e->getMessage();
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+        $mensagem = 'Erro: ' . $e->getMessage();
+        $tipoAlerta = 'erro';
     }
 }
 
 $livros = $gerenciador->listarTodos();
-<<<<<<< HEAD
 if (isset($_GET['busca'])) $livros = $gerenciador->buscar($_GET['busca']);
 
 $livro_edicao = null;
 if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['editar']);
 ?>
-=======
-if (isset($_GET['busca'])) {
-    $livros = $gerenciador->buscar($_GET['busca']);
-}
 
-$livro_edicao = null;
-if (isset($_GET['editar'])) {
-    $livro_edicao = $gerenciador->obterPorId($_GET['editar']);
-}
-?>
 
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
     <title>Livros - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link rel="stylesheet" href="../asset/style/adm/livros.css">
@@ -211,7 +118,7 @@ if (isset($_GET['editar'])) {
                 <h2>Acervo de Livros</h2>
                 <span><?php echo count($livros); ?> livro<?php echo count($livros) !== 1 ? 's' : ''; ?></span>
             </div>
-=======
+
     <title>Gerenciar Livros - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -277,29 +184,27 @@ if (isset($_GET['editar'])) {
                 </form>
             </div>
 
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
             <table class="livros-table">
                 <thead>
                     <tr>
                         <th>Capa</th>
-<<<<<<< HEAD
                         <th>Título</th>
                         <th>Autor</th>
                         <th>Categoria</th>
                         <th>Qtd.</th>
-=======
+
                         <th>ID</th>
                         <th>Título</th>
                         <th>Autor</th>
                         <th>Categoria</th>
                         <th>Quantidade</th>
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
                         <th>Editora</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-<<<<<<< HEAD
                     <?php if (count($livros) > 0): ?>
                         <?php foreach ($livros as $livro): ?>
                             <tr>
@@ -346,7 +251,7 @@ if (isset($_GET['editar'])) {
             <button class="close-btn" onclick="fecharModal()">×</button>
         </div>
         <div class="modal-body">
-=======
+
                     <?php foreach ($livros as $livro): ?>
                         <tr>
                             <td>
@@ -382,12 +287,11 @@ if (isset($_GET['editar'])) {
                 <h2 id="modal-titulo"><?php echo $livro_edicao ? 'Editar Livro' : 'Adicionar Novo Livro'; ?></h2>
                 <button class="close-btn" onclick="fecharModal()">&times;</button>
             </div>
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" id="form-action" value="<?php echo $livro_edicao ? 'atualizar' : 'adicionar'; ?>">
                 <input type="hidden" name="id_livro" id="form-id" value="<?php echo htmlspecialchars($livro_edicao['id_livro'] ?? ''); ?>">
                 <input type="hidden" name="imagem_atual" id="imagem-atual" value="<?php echo htmlspecialchars($livro_edicao['imagem'] ?? ''); ?>">
-<<<<<<< HEAD
 
                 <div class="modal-form-group">
                     <label for="titulo">Título</label>
@@ -504,7 +408,7 @@ if (isset($_GET['editar'])) {
 </script>
 </body>
 </html>
-=======
+
                 <div class="form-group">
                     <label for="titulo">Título:</label>
                     <input type="text" id="titulo" name="titulo" required value="<?php echo htmlspecialchars($livro_edicao['titulo'] ?? ''); ?>">
@@ -670,4 +574,4 @@ if (isset($_GET['editar'])) {
     </script>
 </body>
 </html>
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+

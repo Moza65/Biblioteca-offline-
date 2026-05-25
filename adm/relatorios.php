@@ -1,6 +1,5 @@
 ﻿<?php
-require_once "../Buscas/Gerenciadores.php";
-<<<<<<< HEAD
+require_once __DIR__ . '/../Buscas/Gerenciadores.php';
 require_once __DIR__ . '/common.php';
 
 $gerenciadorLivros      = new GerenciadorLivros();
@@ -15,139 +14,78 @@ $totalReservas    = $gerenciadorReservas->obterTotal();
 
 global $pdo;
 $dataInicial = $_GET['data_inicial'] ?? '';
-$dataFinal   = $_GET['data_final']   ?? '';
-$periodCondition       = '';
-=======
-
-require_once __DIR__ . '/common.php';
-
-$gerenciadorLivros = new GerenciadorLivros();
-$gerenciadorLeitores = new GerenciadorLeitores();
-$gerenciadorEmprestimos = new GerenciadorEmprestimos();
-$gerenciadorReservas = new GerenciadorReservas();
-
-$totalLivros = $gerenciadorLivros->obterTotal();
-$totalLeitores = $gerenciadorLeitores->obterTotal();
-$totalEmprestimos = $gerenciadorEmprestimos->obterTotal();
-$totalReservas = $gerenciadorReservas->obterTotal();
-
-global $pdo;
-$dataInicial = $_GET['data_inicial'] ?? '';
-$dataFinal = $_GET['data_final'] ?? '';
+$dataFinal   = $_GET['data_final'] ?? '';
 $periodCondition = '';
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
 $reservaPeriodCondition = '';
 $paramsPeriodo = [];
 
 if ($dataInicial !== '' && $dataFinal !== '') {
-<<<<<<< HEAD
-    $periodCondition        = ' AND e.data_emprestimo BETWEEN ? AND ? ';
-    $reservaPeriodCondition = ' AND r.data_reserva BETWEEN ? AND ? ';
-    $paramsPeriodo          = [$dataInicial, $dataFinal];
-}
-
-$sqlEmprestimosPeriodo = $pdo->prepare("SELECT COUNT(*) FROM emprestimo e WHERE 1=1 {$periodCondition}");
-$sqlEmprestimosPeriodo->execute($paramsPeriodo);
-$emprestimosPeriodo = (int)$sqlEmprestimosPeriodo->fetchColumn();
-
-$sqlReservasPeriodo = $pdo->prepare("SELECT COUNT(*) FROM reserva r WHERE 1=1 {$reservaPeriodCondition}");
-$sqlReservasPeriodo->execute($paramsPeriodo);
-$reservasPeriodo = (int)$sqlReservasPeriodo->fetchColumn();
-
-$sqlAtrasados = $pdo->prepare("
-    SELECT e.id_emprestimo, e.data_emprestimo, e.data_prevista,
-           li.titulo AS livro,
-           COALESCE(l.nome, u.nome, '-') AS leitor,
-           'Ativo' AS status
-    FROM emprestimo e
-    LEFT JOIN livro li    ON e.fk_Livro_id_livro      = li.id_livro
-    LEFT JOIN leitor l    ON e.id_emprestimo_leitor    = l.id
-    LEFT JOIN usuario u   ON e.fk_Usuario_id_usuario   = u.id_usuario
-    LEFT JOIN devolucao d ON e.id_emprestimo            = d.id_emprestimo
-    WHERE d.id_devolucao IS NULL
-      AND e.data_prevista < NOW() {$periodCondition}
-    ORDER BY e.data_prevista ASC
-");
-$sqlAtrasados->execute($paramsPeriodo);
-$atrasados      = $sqlAtrasados->fetchAll(PDO::FETCH_ASSOC);
-$totalAtrasados = count($atrasados);
-
-$sqlTopLivros = $pdo->prepare("
-    SELECT COALESCE(li.titulo, 'Sem título') AS livro, COUNT(*) AS total
-=======
     $periodCondition = ' AND e.data_emprestimo BETWEEN ? AND ? ';
     $reservaPeriodCondition = ' AND r.data_reserva BETWEEN ? AND ? ';
     $paramsPeriodo = [$dataInicial, $dataFinal];
 }
 
-$sqlEmprestimosPeriodo = $pdo->prepare("SELECT COUNT(*) AS total FROM emprestimo e WHERE 1=1 {$periodCondition}");
-$sqlEmprestimosPeriodo->execute($paramsPeriodo);
-$emprestimosPeriodo = (int)$sqlEmprestimosPeriodo->fetchColumn();
+try {
+    $sqlEmprestimosPeriodo = $pdo->prepare("SELECT COUNT(*) FROM emprestimo e WHERE 1=1 {$periodCondition}");
+    $sqlEmprestimosPeriodo->execute($paramsPeriodo);
+    $emprestimosPeriodo = (int)$sqlEmprestimosPeriodo->fetchColumn();
 
-$sqlReservasPeriodo = $pdo->prepare("SELECT COUNT(*) AS total FROM reserva r WHERE 1=1 {$reservaPeriodCondition}");
-$sqlReservasPeriodo->execute($paramsPeriodo);
-$reservasPeriodo = (int)$sqlReservasPeriodo->fetchColumn();
+    $sqlReservasPeriodo = $pdo->prepare("SELECT COUNT(*) FROM reserva r WHERE 1=1 {$reservaPeriodCondition}");
+    $sqlReservasPeriodo->execute($paramsPeriodo);
+    $reservasPeriodo = (int)$sqlReservasPeriodo->fetchColumn();
 
-$sqlAtrasados = $pdo->prepare("SELECT e.id_emprestimo, e.data_emprestimo, e.data_prevista, li.titulo AS livro, COALESCE(l.nome, u.nome, '-') AS leitor, 'Ativo' AS status
+    $sqlAtrasados = $pdo->prepare("SELECT e.id_emprestimo, e.data_emprestimo, e.data_prevista,
+           li.titulo AS livro,
+           COALESCE(l.nome, u.nome, '-') AS leitor,
+           'Ativo' AS status
     FROM emprestimo e
-    LEFT JOIN livro li ON e.fk_Livro_id_livro = li.id_livro
-    LEFT JOIN leitor l ON e.id_emprestimo_leitor = l.id
-    LEFT JOIN usuario u ON e.fk_Usuario_id_usuario = u.id_usuario
+    LEFT JOIN livro li    ON e.fk_Livro_id_livro = li.id_livro
+    LEFT JOIN leitor l    ON e.id_emprestimo_leitor = l.id
+    LEFT JOIN usuario u   ON e.fk_Usuario_id_usuario = u.id_usuario
     LEFT JOIN devolucao d ON e.id_emprestimo = d.id_emprestimo
     WHERE d.id_devolucao IS NULL
       AND e.data_prevista < NOW() {$periodCondition}
     ORDER BY e.data_prevista ASC");
-$sqlAtrasados->execute($paramsPeriodo);
-$atrasados = $sqlAtrasados->fetchAll(PDO::FETCH_ASSOC);
-$totalAtrasados = count($atrasados);
+    $sqlAtrasados->execute($paramsPeriodo);
+    $atrasados = $sqlAtrasados->fetchAll(PDO::FETCH_ASSOC);
+    $totalAtrasados = count($atrasados);
 
-$sqlTopLivros = $pdo->prepare("SELECT COALESCE(li.titulo, 'Sem título') AS livro, COUNT(*) AS total
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+    $sqlTopLivros = $pdo->prepare("SELECT COALESCE(li.titulo, 'Sem título') AS livro, COUNT(*) AS total
     FROM emprestimo e
     LEFT JOIN livro li ON e.fk_Livro_id_livro = li.id_livro
     WHERE 1=1 {$periodCondition}
     GROUP BY li.id_livro, li.titulo
-<<<<<<< HEAD
-    ORDER BY total DESC LIMIT 5
-");
-$sqlTopLivros->execute($paramsPeriodo);
-$topLivros = $sqlTopLivros->fetchAll(PDO::FETCH_ASSOC);
+    ORDER BY total DESC LIMIT 5");
+    $sqlTopLivros->execute($paramsPeriodo);
+    $topLivros = $sqlTopLivros->fetchAll(PDO::FETCH_ASSOC);
 
-$sqlTopReservados = $pdo->prepare("
-    SELECT COALESCE(li.titulo, 'Sem título') AS livro, COUNT(*) AS total
-=======
-    ORDER BY total DESC
-    LIMIT 5");
-$sqlTopLivros->execute($paramsPeriodo);
-$topLivros = $sqlTopLivros->fetchAll(PDO::FETCH_ASSOC);
-
-$sqlTopReservados = $pdo->prepare("SELECT COALESCE(li.titulo, 'Sem título') AS livro, COUNT(*) AS total
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+    $sqlTopReservados = $pdo->prepare("SELECT COALESCE(li.titulo, 'Sem título') AS livro, COUNT(*) AS total
     FROM reserva r
     LEFT JOIN livro li ON r.fk_Livro_id_livro = li.id_livro
     WHERE 1=1 {$reservaPeriodCondition}
     GROUP BY li.id_livro, li.titulo
-<<<<<<< HEAD
-    ORDER BY total DESC LIMIT 5
-");
-$sqlTopReservados->execute($paramsPeriodo);
-$topReservados = $sqlTopReservados->fetchAll(PDO::FETCH_ASSOC);
-?>
-=======
-    ORDER BY total DESC
-    LIMIT 5");
-$sqlTopReservados->execute($paramsPeriodo);
-$topReservados = $sqlTopReservados->fetchAll(PDO::FETCH_ASSOC);
+    ORDER BY total DESC LIMIT 5");
+    $sqlTopReservados->execute($paramsPeriodo);
+    $topReservados = $sqlTopReservados->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $ex) {
+    $emprestimosPeriodo = 0;
+    $reservasPeriodo = 0;
+    $atrasados = [];
+    $totalAtrasados = 0;
+    $topLivros = [];
+    $topReservados = [];
+}
 ?>
 
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Relatórios - Biblioteca Pandora</title>
-<<<<<<< HEAD
+
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link rel="stylesheet" href="../asset/style/adm/relatorios.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -324,7 +262,7 @@ $topReservados = $sqlTopReservados->fetchAll(PDO::FETCH_ASSOC);
 </div>
 </body>
 </html>
-=======
+
     <link rel="stylesheet" href="../asset/style/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -474,4 +412,4 @@ $topReservados = $sqlTopReservados->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </body>
 </html>
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
