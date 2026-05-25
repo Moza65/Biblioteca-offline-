@@ -35,7 +35,6 @@ $categorias = $gerenciador->listarTodos();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categorias - Biblioteca Pandora</title>
-
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
