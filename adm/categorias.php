@@ -53,7 +53,7 @@ $categorias = $gerenciador->listarTodos();
         <header class="topbar">
             <div class="welcome-text">
                 <div class="page-title-row">
-                    <img src="../asset/icones/categorias.svg" alt="" class="page-title-icon">
+                    <img src="../asset/icones/folder.svg" alt="" class="page-title-icon">
                     <h1>Categorias</h1>
                 </div>
                 <p>Gerencie as categorias do acervo</p>
