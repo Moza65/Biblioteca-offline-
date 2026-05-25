@@ -27,16 +27,6 @@ $totalReservas = count($reservas);
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link rel="stylesheet" href="../asset/style/adm/reservas.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .reservas-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .reservas-table th { background-color: #f3f4f6; padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; }
-        .reservas-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
-        .reservas-table tr:hover { background-color: #f9fafb; }
-        .badge-status { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .badge-status.ativa { background-color: #d1fae5; color: #065f46; }
-        .badge-status.vencida { background-color: #fee2e2; color: #991b1b; }
-        .table-empty { text-align: center; padding: 30px; color: #6b7280; }
-    </style>
 </head>
 <body>
 <div class="dashboard-container">

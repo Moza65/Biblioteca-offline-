@@ -157,18 +157,6 @@ $devolvidos = $gerenciador->listarDevolvidos();
 </html>
     <link rel="stylesheet" href="../asset/style/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .devolucao-table{margin: auto;width:  100%; }
-        .devolucao-table, .devolucao-table th, .devolucao-table td { border-collapse: collapse; }
-        .devolucao-table th { background: #f3f4f6; padding: 12px;  text-align: center; border-bottom: 2px solid #e5e7eb; }
-        .devolucao-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: center; }
-        .devolucao-table tr:hover { background: #f9fafb; }
-        .status {  border-radius: 999px; font-size: 12px; font-weight: 700; display: inline-block; }
-        .status.pendente { background: #fef3c7; color: #92400e; }
-        .status.devolvido { background: #d1fae5; color: #065f46; }
-        .btn-action { padding: 8px 14px; border: none; border-radius: 8px; cursor: pointer; color: white; background: #10b981; }
-        .info-box { background:#f3f4f6; border:1px solid #e5e7eb; border-radius:10px; padding:16px; margin-top:20px; color:#111827; }
-    </style>
 </head>
 <body>
     <div class="dashboard-container">

@@ -122,38 +122,6 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
     <title>Gerenciar Livros - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .modal.show { display: flex; align-items: center; justify-content: center; }
-        .modal-content { background-color: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 520px; max-height: calc(100vh - 60px); overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .close-btn { background: none; border: none; font-size: 28px; cursor: pointer; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
-        .btn-grupo { display: flex; gap: 10px; margin-top: 20px; }
-        .btn-grupo button { flex: 1; padding: 10px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
-        .btn-primary { background-color: #6366f1; color: white; }
-        .btn-primary:hover { background-color: #4f46e5; }
-        .btn-secondary { background-color: #e5e7eb; color: #333; }
-        .btn-danger { background-color: #ef4444; color: white; }
-        .btn-danger:hover { background-color: #dc2626; }
-        .btn-view { background-color: #10b981; color: white; }
-        .btn-view:hover { background-color: #059669; }
-        .livros-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .livros-table th { background-color: #f3f4f6; padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; }
-        .livros-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; vertical-align: middle; }
-        .livros-table tr:hover { background-color: #f9fafb; }
-        .btn-acao { padding: 6px 12px; margin-right: 5px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .btn-edit { background-color: #3b82f6; color: white; }
-        .btn-delete { background-color: #ef4444; color: white; }
-        .mensagem { padding: 12px; margin-bottom: 20px; border-radius: 4px; }
-        .mensagem.sucesso { background-color: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
-        .mensagem.erro { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        .btn-novo { background-color: #6366f1; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-bottom: 20px; }
-        .capa-thumb { width: 60px; height: 90px; object-fit: cover; border-radius: 6px; border: 1px solid #d1d5db; }
-        .preview-capa { display: block; width: 100%; max-width: 180px; margin-top: 10px; border-radius: 8px; border: 1px solid #d1d5db; }
-    </style>
 </head>
 <body>
     <div class="dashboard-container">

@@ -28,17 +28,6 @@ $total = count($emprestimos);
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link rel="stylesheet" href="../asset/style/adm/emprestimos.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .emprestimos-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .emprestimos-table th { background-color: #f3f4f6; padding: 12px; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; }
-        .emprestimos-table td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
-        .emprestimos-table tr:hover { background-color: #f9fafb; }
-        .status { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .status.Ativo { background-color: #d1fae5; color: #065f46; }
-        .status.devolvido { background-color: #dbeafe; color: #0c4a6e; }
-        .status.atrasado { background-color: #fee2e2; color: #991b1b; }
-        .table-empty { text-align: center; padding: 30px; color: #6b7280; }
-    </style>
 </head>
 <body>
 <div class="dashboard-container">
