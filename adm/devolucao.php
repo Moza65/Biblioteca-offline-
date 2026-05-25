@@ -1,20 +1,17 @@
 ﻿<?php
 require_once "../Buscas/Gerenciadores.php";
 require_once __DIR__ . '/common.php';
-<<<<<<< HEAD
 
 $gerenciador = new GerenciadorDevolucoes();
 $mensagem    = '';
 $tipoAlerta  = '';
-=======
 $gerenciador = new GerenciadorDevolucoes();
 $mensagem = '';
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'devolver') {
     try {
         $gerenciador->marcarComoDevolvido($_POST['id_emprestimo']);
-<<<<<<< HEAD
         $mensagem   = "Empréstimo marcado como devolvido com sucesso.";
         $tipoAlerta = 'sucesso';
     } catch (Exception $e) {
@@ -26,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 $pendentes  = $gerenciador->listarPendentes();
 $devolvidos = $gerenciador->listarDevolvidos();
 ?>
-=======
         $mensagem = "Empréstimo marcado como devolvido com sucesso.";
     } catch (Exception $e) {
         $mensagem = "Erro: " . $e->getMessage();
@@ -37,14 +33,13 @@ $pendentes = $gerenciador->listarPendentes();
 $devolvidos = $gerenciador->listarDevolvidos();
 ?>
 
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devolução - Biblioteca Pandora</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link rel="stylesheet" href="../asset/style/adm/devolucao.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -160,7 +155,6 @@ $devolvidos = $gerenciador->listarDevolvidos();
 </div>
 </body>
 </html>
-=======
     <link rel="stylesheet" href="../asset/style/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -272,4 +266,4 @@ $devolvidos = $gerenciador->listarDevolvidos();
     </div>
 </body>
 </html>
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
+
