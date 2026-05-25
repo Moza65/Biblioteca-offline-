@@ -1,28 +1,25 @@
 /* ===================== CATEGORIAS ===================== */
-/* Segue o mesmo design system de livros.css             */
-/* Variáveis herdadas de adm.css:                        */
-/*   --primary, --primary-light                          */
-/*   --gray-50 … --gray-900                              */
-/*   --danger, --danger-light                            */
-/*   --success, --success-light                          */
+/* Variáveis disponíveis em adm.css:
+   --primary:#5C3B1E        --primary-light:#F5EFE6
+   --success:#6B705C        --success-light:#E9EAE0
+   --warning:#7B4B2A        --warning-light:#F5EFE6
+   --danger:#8C4A42         --danger-light:#F7E9E8
+   --gray-50:#FAF7F2        --gray-100:#F5EFE6
+   --gray-200:#E0D4C8       --gray-400:#B08968
+   --gray-500:#6E6259       --gray-800:#3E2A1F
+   --gray-900:#1E1E1E
+*/
 
-/* ── TOPBAR ─────────────────────────────────────────── */
-.page-title-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* ── LAYOUT EM DUAS COLUNAS ──────────────────────────── */
+.content-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 24px;
+    align-items: start;
 }
 
-.page-title-row h1 {
-    font-size: 28px;
-    margin: 0;
-    line-height: 1.1;
-}
-
-.page-title-icon {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
+@media (max-width: 900px) {
+    .content-grid { grid-template-columns: 1fr; }
 }
 
 /* ── ALERTA ──────────────────────────────────────────── */
@@ -46,7 +43,7 @@
 .alert.sucesso {
     background: var(--success-light);
     color: var(--success);
-    border: 1px solid #c8cbbf;
+    border: 1px solid #cdd0c5;
 }
 
 .alert.sucesso::before {
@@ -75,26 +72,7 @@
     font-size: 12px; font-weight: 700; flex-shrink: 0;
 }
 
-/* classe legacy que o PHP usa */
-.mensagem { composes: alert from global; }
-.mensagem.sucesso { composes: sucesso from global; }
-.mensagem.erro    { composes: erro    from global; }
-
-/* ── LAYOUT EM DUAS COLUNAS ──────────────────────────── */
-.content-grid {
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-@media (max-width: 900px) {
-    .content-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ── CARD GENÉRICO ───────────────────────────────────── */
+/* ── CARD ────────────────────────────────────────────── */
 .card {
     background: #fff;
     border: 1px solid var(--gray-200);
@@ -108,10 +86,10 @@
     color: var(--gray-900);
     margin: 0;
     padding: 20px 24px;
-    border-bottom: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
 }
 
-/* ── FORMULÁRIO (card esquerdo) ──────────────────────── */
+/* ── FORMULÁRIO ──────────────────────────────────────── */
 .card form {
     padding: 20px 24px 24px;
     display: flex;
@@ -149,14 +127,14 @@
 .form-group textarea:focus {
     border-color: var(--primary);
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(92,59,30,0.08);
+    box-shadow: 0 0 0 3px rgba(92, 59, 30, 0.08);
 }
 
 .form-group textarea {
     min-height: 90px;
 }
 
-/* ── BOTÕES ──────────────────────────────────────────── */
+/* ── GRUPO DE BOTÕES ─────────────────────────────────── */
 .btn-group {
     display: flex;
     gap: 10px;
@@ -166,6 +144,7 @@
 .btn-primary {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     background: linear-gradient(135deg, var(--primary), #7B4B2A);
     color: #fff;
@@ -177,24 +156,22 @@
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-    box-shadow: 0 2px 8px rgba(92,59,30,0.25);
+    box-shadow: 0 2px 8px rgba(92, 59, 30, 0.25);
     text-decoration: none;
     white-space: nowrap;
     flex: 1;
-    justify-content: center;
 }
 
 .btn-primary:hover {
     opacity: 0.92;
     transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(92,59,30,0.3);
+    box-shadow: 0 4px 14px rgba(92, 59, 30, 0.3);
 }
 
 .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
     background: #fff;
     color: var(--gray-800);
     border: 1.5px solid var(--gray-200);
@@ -210,11 +187,11 @@
 }
 
 .btn-secondary:hover {
-    background: var(--gray-100);
+    background: var(--gray-50);
     border-color: var(--gray-400);
 }
 
-/* ── TABELA (card direito) ───────────────────────────── */
+/* ── TABELA ──────────────────────────────────────────── */
 .categorias-table {
     width: 100%;
     border-collapse: collapse;
@@ -229,14 +206,14 @@
     color: var(--gray-500);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
 }
 
 .categorias-table td {
     padding: 13px 18px;
     font-size: 14px;
     color: var(--gray-900);
-    border-bottom: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-200);
     vertical-align: middle;
 }
 
@@ -249,25 +226,30 @@
     transition: background 0.15s;
 }
 
-/* nome em destaque */
-.categorias-table td:nth-child(2) {
-    font-weight: 600;
-    color: var(--gray-900);
+/* coluna # */
+.categorias-table td:first-child {
+    width: 48px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-400);
 }
 
-/* descrição com cor mais suave */
+/* coluna nome */
+.categorias-table td:nth-child(2) {
+    font-weight: 600;
+}
+
+/* coluna descrição */
 .categorias-table td:nth-child(3) {
     color: var(--gray-500);
     font-size: 13px;
     max-width: 260px;
 }
 
-/* ID badge */
-.categorias-table td:first-child {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--gray-400);
-    width: 48px;
+/* coluna ações — não quebra linha */
+.categorias-table td:last-child {
+    white-space: nowrap;
+    width: 1%;
 }
 
 /* empty state */
@@ -278,11 +260,10 @@
     font-size: 14px;
 }
 
-/* ── BOTÕES DE AÇÃO NA TABELA ────────────────────────── */
+/* ── BOTÕES DE AÇÃO ──────────────────────────────────── */
 .btn-action {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
     padding: 6px 12px;
     border: none;
     border-radius: 7px;
@@ -296,23 +277,19 @@
 }
 
 .btn-action:hover {
-    opacity: 0.85;
+    opacity: 0.82;
     transform: translateY(-1px);
 }
 
+/* Editar — azul neutro para não conflitar com o bege do sistema */
 .btn-edit {
-    background: var(--primary-light);
-    color: var(--primary);
-    margin-right: 4px;
+    background: #E8EEF4;
+    color: #2E5F8A;
+    margin-right: 6px;
 }
 
+/* Remover — vermelho-acastanhado do sistema */
 .btn-delete {
     background: var(--danger-light);
     color: var(--danger);
-}
-
-/* ── COLUNA AÇÕES: não quebra ────────────────────────── */
-.categorias-table td:last-child {
-    white-space: nowrap;
-    width: 1%;
 }
