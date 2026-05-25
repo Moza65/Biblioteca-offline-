@@ -1,0 +1,145 @@
+/* ===================== RESERVAS ===================== */
+
+/* TÍTULO COM ÍCONE */
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title-row h1 {
+    font-size: 28px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.page-title-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* CARD DA TABELA */
+.table-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.table-card-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.table-card-header span {
+    font-size: 13px;
+    color: var(--gray-400);
+}
+
+/* TABELA */
+.reservas-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reservas-table th {
+    background: var(--gray-50);
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.reservas-table td {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--gray-900);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.reservas-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.reservas-table tbody tr:hover td {
+    background: var(--gray-50);
+}
+
+/* ID */
+.reservas-table .col-id {
+    font-size: 13px;
+    color: var(--gray-400);
+    font-weight: 600;
+}
+
+/* PRAZO VENCIDO */
+.prazo-vencido {
+    color: var(--danger);
+    font-weight: 700;
+}
+
+/* BADGES DE STATUS */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.badge-status.ativa {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.badge-status.ativa::before {
+    background: var(--success);
+}
+
+.badge-status.vencida {
+    background: var(--danger-light);
+    color: var(--danger);
+}
+
+.badge-status.vencida::before {
+    background: var(--danger);
+}
+
+/* EMPTY STATE */
+.table-empty {
+    text-align: center;
+    padding: 48px 16px;
+    color: var(--gray-400);
+    font-size: 14px;
+}
+
+.table-empty-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 10px;
+}
