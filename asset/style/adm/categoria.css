@@ -10,6 +10,24 @@
    --gray-900:#1E1E1E
 */
 
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title-row h1 {
+    font-size: 28px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.page-title-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
 /* ── LAYOUT EM DUAS COLUNAS ──────────────────────────── */
 .content-grid {
     display: grid;
