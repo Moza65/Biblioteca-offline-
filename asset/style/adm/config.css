@@ -1,0 +1,291 @@
+/* TÍTULO DA PÁGINA COM ÍCONE */
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title-row h1 {
+    font-size: 28px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.page-title-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* ===================== CONFIGURAÇÕES ===================== */
+
+.settings-wrapper {
+    max-width: 860px;
+}
+
+/* SECÇÕES */
+.settings-section {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+
+.settings-section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.settings-section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.settings-section-icon img {
+    width: 22px;
+    height: 22px;
+}
+
+.settings-section-title h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0 0 2px;
+}
+
+.settings-section-title p {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin: 0;
+}
+
+/* GRID DE CAMPOS */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-grid .form-field.full {
+    grid-column: 1 / -1;
+}
+
+/* CAMPOS */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-800);
+    letter-spacing: 0.02em;
+}
+
+.form-field .field-hint {
+    font-size: 12px;
+    color: var(--gray-400);
+    margin-top: -4px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    background: var(--gray-50);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--gray-900);
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+    width: 100%;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(92, 59, 30, 0.08);
+}
+
+.form-field input::placeholder {
+    color: var(--gray-400);
+}
+
+/* INPUT COM PREFIXO */
+.input-prefix-wrapper {
+    display: flex;
+    align-items: center;
+    background: var(--gray-50);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-prefix-wrapper:focus-within {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(92, 59, 30, 0.08);
+}
+
+.input-prefix {
+    padding: 11px 12px 11px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-500);
+    background: var(--gray-100);
+    border-right: 1.5px solid var(--gray-200);
+    white-space: nowrap;
+}
+
+.input-prefix-wrapper input {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding-left: 12px;
+}
+
+/* ALERTAS */
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    animation: fadeSlideIn 0.3s ease;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.alert.success {
+    background: var(--success-light);
+    color: var(--success);
+    border: 1px solid #c8cbbf;
+}
+
+.alert.success::before {
+    content: '✓';
+    width: 22px;
+    height: 22px;
+    background: var(--success);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.alert.error {
+    background: var(--danger-light);
+    color: var(--danger);
+    border: 1px solid #e8c0bc;
+}
+
+.alert.error::before {
+    content: '!';
+    width: 22px;
+    height: 22px;
+    background: var(--danger);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ACÇÕES DO FORMULÁRIO */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 28px;
+    border-top: 1px solid var(--gray-100);
+    margin-top: 8px;
+}
+
+/* BOTÕES */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--primary), #7B4B2A);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 2px 10px rgba(92, 59, 30, 0.3);
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(92, 59, 30, 0.35);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 6px rgba(92, 59, 30, 0.2);
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--gray-800);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: var(--gray-100);
+    border-color: var(--gray-400);
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
