@@ -6,9 +6,11 @@ $put = ($callClass->QuantidadeLivro());
 $putEmprestimo = ($callClass->Quantidadeemprestimo());
 $putLeitores = ($callClass->QuantidadeLeitores());
 $putReserva = ($callClass->QuantidadeReserva());
-
+//$putSearch = $callClass->ShowSerach();
 require_once __DIR__ . '/common.php';
-
+if(isset($_POST["pesquisa"]) and !empty($_POST["campoPesquisa"])){
+    $pesquisaEncontrada = $callClass->ShowSerach($_POST["campoPesquisa"]);
+}
 $total_atrasados = 0;
 ?>
 
@@ -32,8 +34,12 @@ $total_atrasados = 0;
                 </div>
                 <div class="topbar-actions">
                     <div class="search-bar">
-                        <img src="../asset/icones/search.svg" class="icon" alt="">
-                        <input type="text" placeholder="Buscar livros...">
+                        <form action="" method="post" >
+                            <input type="text" name="campoPesquisa" placeholder="Buscar livros...">
+                            <button name="pesquisar" type="submit">
+                                <img src="../asset/icones/search.svg" class="icon" alt="">
+                            </button> 
+                        </form>
                     </div>
                     <button class="action-btn">
                         <img src="../asset/icones/bell.svg" class="icon" alt="">
@@ -97,6 +103,61 @@ $total_atrasados = 0;
                 </div>
             </div>
             <?php endif; ?>
+            <?php
+            if(isset($pesquisaEncontrada) and !empty($pesquisaEncontrada) and is_array($pesquisaEncontrada)){
+                if(isset($pesquisaEncontrada["0"]["id_emprestimo"])){ ?>
+                    //AQUÍ O USUÁRIO PESQUISOU EMPRÉSTIMO
+                    <h2>Informações da pesquisa </h2>
+                    <table class="emprestimos-table">
+                <thead>
+                    <tr>
+                        <th hidden>ID</th>
+                        <th>Livro</th>
+                        <th>Leitor</th>
+                        <th>Livro</th>
+                        <th>Livro</th>
+                        <th>Livro</th>
+                        <th>Livro</th>
+                        <th>Data do Empréstimo</th>
+                        <th>Previsão de Devolução</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (count($pesquisaEncontrada) > 0): ?>
+                        <?php foreach ($pesquisaEncontrada as $emp): ?>
+                            <tr>
+                                <td hidden><?php echo htmlspecialchars($emp['id_emprestimo'] ?? '-'); ?></td>
+                                <td><?php echo htmlspecialchars($emp['titulo_livro'] ?? '-'); ?></td>
+                                <td><?php echo date('d/m/Y', strtotime($emp['data_emprestimo'] ?? 'now')); ?></td>
+                                <td><?php echo date('d/m/Y', strtotime($emp['data_prevista'] ?? 'now')); ?></td>
+                                <td>
+                                    <?php
+                                        if (!empty($emp['data_devolucao'])) {
+                                            $status = 'Devolvido';
+                                            $class_status = 'devolvido';
+                                        } elseif (strtotime($emp['data_prevista'] ?? 'now') < time()) {
+                                            $status = 'Atrasado';
+                                            $class_status = 'atrasado';
+                                        } else {
+                                            $status = !empty($emp['estado']) ? 'Ativo' : 'Pendente';
+                                            $class_status = strtolower($status);
+                                        }
+                                    ?>
+                                    <span class="status <?php echo $class_status; ?>"><?php echo htmlspecialchars($status); ?></span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 30px;">Nenhum empréstimo registrado</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+               <?php }
+            }
+            ?>
         </main>
     </div>
 </body>
