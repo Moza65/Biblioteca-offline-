@@ -31,7 +31,7 @@ if(isset($_POST["pesquisa"]) and !empty($_POST["campoPesquisa"])){
     $pesquisaEncontrada = $callClass->ShowSerach($_POST["campoPesquisa"]);
 }
 
-$total_atrasados = 0;
+$total_atrasados = 0; 
 ?>
 <!DOCTYPE html>
 <html lang="pt">
