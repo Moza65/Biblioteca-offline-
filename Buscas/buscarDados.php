@@ -47,5 +47,73 @@ class BuscarDados{
         }
 
     }
+
+    public function GetBooks($value){
+        global $pdo;
+        $sql = $pdo->prepare("SELECT * FROM livro WHERE titulo = ? || autor = ?  ");
+        $sql->execute([$value,$value]);
+        $sql = $sql->fetchAll(PDO::FETCH_ASSOC);
+        if(isset($sql) and !empty($sql)){
+            return $sql;
+        }else{
+            return "Nada";
+        }
+    }
+    public function GetReady($value){
+        global $pdo;
+        $sql = $pdo->prepare("SELECT * FROM leitor WHERE nome  = ? ");
+        $sql->execute([$value]);
+        $sql = $sql->fetchAll(PDO::FETCH_ASSOC);
+        if(isset($sql) and !empty($sql)){
+            return $sql;
+        }
+    }
+    public function GetBroard(){
+        global $pdo;
+        $sql  = "SELECT leitor.*,livro.*,emprestimo.*,usuario.* FROM emprestimo 
+        join leitor on emprestimo.id_emprestimo_leitor = leitor.id
+        join livro on emprestimo.fk_Livro_id_livro = livro.id_livro
+        join usuario on emprestimo.fk_Usuario_id_usuario = usuario.id_usuario
+        WHERE 1 ";
+        $sql = $pdo->prepare($sql);
+        $sql->execute();
+        $sql = $sql->fetchAll(PDO::FETCH_ASSOC);
+        if(isset($sql) and !empty($sql)){
+            return $sql;
+        }
+    }
+
+    //CRIAR A FUNÇÁO QUE RESPONDE A PESQUISA DO USUÁRIO
+    public function ShowSerach($value){
+        if(mb_strtolower($value) == "empréstimo" ||  mb_strtolower($value) == "emprestimo" || mb_strtolower($value) == "impréstimo" || mb_strtolower($value) == "imprestimo"){
+            if($this->GetBroard() and is_array($this->GetBroard())){
+                return $this->GetBroard();
+                exit();
+            }else{
+                return "Pesquisa de empréstino não encontrado";
+                exit();
+            }
+        }else{
+            if($this->GetReady($value) and !empty( $this->GetReady($value))){
+                return $this->GetReady($value);
+                exit();
+            }elseif($this->GetBooks($value) and !empty( $this->GetBooks($value))) {
+                return $this->GetBooks($value);
+                exit();
+            }else{
+                return "Pesquisa não encontrada ";
+                exit();
+            }
+        }
+    }
 }
+
+//Chamar a classe
+/*
+$callClass = new BuscarDados();
+echo "<pre>";
+print_r($callClass->GetBroard());
+echo "</pre>";
+exit();
+*/
 ?>

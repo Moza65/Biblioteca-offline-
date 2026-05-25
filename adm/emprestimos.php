@@ -43,7 +43,7 @@ $emprestimos = $sql->fetchAll(PDO::FETCH_ASSOC);
             <table class="emprestimos-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th hidden>ID</th>
                         <th>Livro</th>
                         <th>Data do Empréstimo</th>
                         <th>Previsão de Devolução</th>
@@ -54,7 +54,7 @@ $emprestimos = $sql->fetchAll(PDO::FETCH_ASSOC);
                     <?php if (count($emprestimos) > 0): ?>
                         <?php foreach ($emprestimos as $emp): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($emp['id_emprestimo'] ?? '-'); ?></td>
+                                <td hidden><?php echo htmlspecialchars($emp['id_emprestimo'] ?? '-'); ?></td>
                                 <td><?php echo htmlspecialchars($emp['titulo_livro'] ?? '-'); ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($emp['data_emprestimo'] ?? 'now')); ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($emp['data_prevista'] ?? 'now')); ?></td>
