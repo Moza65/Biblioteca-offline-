@@ -5,9 +5,6 @@ require_once __DIR__ . '/common.php';
 $gerenciador = new GerenciadorDevolucoes();
 $mensagem    = '';
 $tipoAlerta  = '';
-$gerenciador = new GerenciadorDevolucoes();
-$mensagem = '';
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'devolver') {
     try {
@@ -23,17 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 $pendentes  = $gerenciador->listarPendentes();
 $devolvidos = $gerenciador->listarDevolvidos();
 ?>
-        $mensagem = "Empréstimo marcado como devolvido com sucesso.";
-    } catch (Exception $e) {
-        $mensagem = "Erro: " . $e->getMessage();
-    }
-}
-
-$pendentes = $gerenciador->listarPendentes();
-$devolvidos = $gerenciador->listarDevolvidos();
-?>
-
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -50,7 +36,6 @@ $devolvidos = $gerenciador->listarDevolvidos();
 
     <main class="main-content">
 
-        <!-- TOPBAR -->
         <header class="topbar">
             <div class="welcome-text">
                 <div class="page-title-row">
@@ -61,19 +46,17 @@ $devolvidos = $gerenciador->listarDevolvidos();
             </div>
         </header>
 
-        <!-- ALERTA -->
         <?php if ($mensagem): ?>
             <div class="alert <?php echo $tipoAlerta; ?>">
                 <?php echo htmlspecialchars($mensagem); ?>
             </div>
         <?php endif; ?>
 
-        <!-- INFO -->
         <div class="info-box">
             Aqui pode ver os empréstimos pendentes e registar devoluções rapidamente.
         </div>
 
-        <!-- TABELA PENDENTES -->
+        <!-- PENDENTES -->
         <div class="section-card">
             <div class="section-card-header">
                 <h2>Pendentes para devolução</h2>
@@ -117,7 +100,7 @@ $devolvidos = $gerenciador->listarDevolvidos();
             </table>
         </div>
 
-        <!-- TABELA DEVOLVIDOS -->
+        <!-- DEVOLVIDOS -->
         <div class="section-card">
             <div class="section-card-header">
                 <h2>Devoluções registadas</h2>
@@ -155,103 +138,3 @@ $devolvidos = $gerenciador->listarDevolvidos();
 </div>
 </body>
 </html>
-    <link rel="stylesheet" href="../asset/style/adm.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="dashboard-container">
-        <?php include 'sidebar.php'; ?>
-        <main class="main-content">
-            <header class="topbar">
-                <div class="welcome-text">
-                    <h1>Devolução 🔁</h1>
-                    <p>Registre e acompanhe devoluções de empréstimos</p>
-                </div>
-            </header>
-            <?php if ($mensagem): ?>
-                <div class="mensagem <?php echo strpos($mensagem, 'Erro') !== false ? 'erro' : 'sucesso'; ?>" style="margin-top: 20px;">
-                    <?php echo htmlspecialchars($mensagem); ?>
-                </div>
-            <?php endif; ?>
-            <div class="info-box">
-                Aqui você vê empréstimos pendentes e pode registrar devoluções rapidamente.
-            </div>
-
-            <section style="margin-top: 24px;">
-                <h2>Pendentes para devolução</h2>
-                <table class="devolucao-table" style="margin-top: 16px;">
-                    <thead>
-                        <tr>
-                            <th hidden>ID</th>
-                            <th>Leitor</th>
-                            <th>Livro</th>
-                            <th>Empréstimo</th>
-                            <th>Previsão</th>
-                            <th>Status</th>
-                            <th>Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($pendentes) > 0): ?>
-                            <?php foreach ($pendentes as $item): ?>
-                                <tr>
-                                    <td hidden><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
-                                    <td><?php echo htmlspecialchars($item['leitor']); ?></td>
-                                    <td><?php echo htmlspecialchars($item['titulo_livro']); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($item['data_emprestimo'])); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($item['data_prevista'])); ?></td>
-                                    <td><span class="status pendente">Pendente</span></td>
-                                    <td>
-                                        <form method="POST" style="margin:0;">
-                                            <input type="hidden" name="action" value="devolver">
-                                            <input type="hidden" name="id_emprestimo" value="<?php echo (int)$item['id_emprestimo']; ?>">
-                                            <button type="submit" class="btn-action">Registrar</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="7" style="text-align:center; padding: 24px;">Nenhum empréstimo pendente encontrado.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </section>
-
-            <section style="margin-top: 40px;">
-                <h2>Devoluções registradas</h2>
-                <table class="devolucao-table" style="margin-top: 16px;">
-                    <thead>
-                        <tr>
-                            <th hidden>ID Empréstimo</th>
-                            <th>Leitor</th>
-                            <th >Livro</th>
-                            <th>Devolução</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($devolvidos) > 0): ?>
-                            <?php foreach ($devolvidos as $item): ?>
-                                <tr>
-                                    <td hidden><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
-                                    <td><?php echo htmlspecialchars($item['leitor']); ?></td>
-                                    <td><?php echo htmlspecialchars($item['titulo_livro']); ?></td>
-                                    <td><?php echo date('d/m/Y', strtotime($item['data_devolucao'])); ?></td>
-                                    <td><span class="status devolvido">Devolvido</span></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="5" style="text-align:center; padding: 24px;">Nenhuma devolução registrada ainda.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </section>
-        </main>
-    </div>
-</body>
-</html>
-
