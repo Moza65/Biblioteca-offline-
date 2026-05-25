@@ -1,0 +1,245 @@
+/* ===================== DEVOLUÇÃO ===================== */
+
+/* TÍTULO COM ÍCONE */
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title-row h1 {
+    font-size: 28px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.page-title-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* INFO BOX */
+.info-box {
+    background: var(--primary-light);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--gray-800);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-box::before {
+    content: 'ℹ';
+    width: 22px;
+    height: 22px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ALERTAS */
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    animation: fadeSlideIn 0.3s ease;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.alert.sucesso {
+    background: var(--success-light);
+    color: var(--success);
+    border: 1px solid #c8cbbf;
+}
+
+.alert.sucesso::before {
+    content: '✓';
+    width: 22px;
+    height: 22px;
+    background: var(--success);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.alert.erro {
+    background: var(--danger-light);
+    color: var(--danger);
+    border: 1px solid #e8c0bc;
+}
+
+.alert.erro::before {
+    content: '!';
+    width: 22px;
+    height: 22px;
+    background: var(--danger);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* SECÇÕES */
+.section-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.section-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.section-card-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.section-card-header span {
+    font-size: 13px;
+    color: var(--gray-400);
+}
+
+/* TABELAS */
+.devolucao-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.devolucao-table th {
+    background: var(--gray-50);
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.devolucao-table td {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--gray-900);
+    border-bottom: 1px solid var(--gray-100);
+    text-align: left;
+}
+
+.devolucao-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.devolucao-table tbody tr:hover td {
+    background: var(--gray-50);
+}
+
+/* BADGES */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.badge-status.pendente {
+    background: var(--warning-light);
+    color: var(--warning);
+}
+
+.badge-status.pendente::before {
+    background: var(--warning);
+}
+
+.badge-status.devolvido {
+    background: var(--success-light);
+    color: var(--success);
+}
+
+.badge-status.devolvido::before {
+    background: var(--success);
+}
+
+/* BOTÃO DE AÇÃO */
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--primary), #7B4B2A);
+    color: white;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(92, 59, 30, 0.2);
+}
+
+.btn-action:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(92, 59, 30, 0.28);
+}
+
+.btn-action:active {
+    transform: translateY(0);
+}
+
+/* EMPTY STATE */
+.table-empty {
+    text-align: center;
+    padding: 40px 16px;
+    color: var(--gray-400);
+    font-size: 14px;
+}

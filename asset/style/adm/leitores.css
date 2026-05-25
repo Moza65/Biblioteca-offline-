@@ -1,0 +1,125 @@
+/* ===================== LEITORES ===================== */
+
+/* TÍTULO COM ÍCONE */
+.page-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-title-row h1 {
+    font-size: 28px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.page-title-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+/* CARD DA TABELA */
+.table-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.table-card-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.table-card-header span {
+    font-size: 13px;
+    color: var(--gray-400);
+}
+
+/* TABELA */
+.leitores-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leitores-table th {
+    background: var(--gray-50);
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.leitores-table td {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--gray-900);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.leitores-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.leitores-table tbody tr:hover td {
+    background: var(--gray-50);
+}
+
+/* AVATAR */
+.leitor-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), #7B4B2A);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.leitor-nome-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ID */
+.col-id {
+    font-size: 13px;
+    color: var(--gray-400);
+    font-weight: 600;
+}
+
+/* NIF */
+.col-nif {
+    font-size: 13px;
+    color: var(--gray-500);
+    font-family: monospace;
+    letter-spacing: 0.04em;
+}
+
+/* EMPTY STATE */
+.table-empty {
+    text-align: center;
+    padding: 48px 16px;
+    color: var(--gray-400);
+    font-size: 14px;
+}
