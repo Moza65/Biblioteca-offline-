@@ -58,8 +58,6 @@ if (isset($_GET['busca'])) $livros = $gerenciador->buscar($_GET['busca']);
 $livro_edicao = null;
 if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['editar']);
 ?>
-
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -119,40 +117,6 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
                 <span><?php echo count($livros); ?> livro<?php echo count($livros) !== 1 ? 's' : ''; ?></span>
             </div>
 
-    <title>Gerenciar Livros - Biblioteca Pandora</title>
-    <link rel="stylesheet" href="../asset/style/adm.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="dashboard-container">
-        <?php include 'sidebar.php'; ?>
-        <main class="main-content">
-            <header class="topbar">
-                <div class="welcome-text">
-                    <h1>Gerenciar Livros 📚</h1>
-                    <p>Adicione, edite ou remova livros do acervo</p>
-                </div>
-            </header>
-
-            <?php if ($mensagem): ?>
-                <div class="mensagem <?php echo strpos($mensagem, 'Erro') !== false ? 'erro' : 'sucesso'; ?>">
-                    <?php echo htmlspecialchars($mensagem); ?>
-                </div>
-            <?php endif; ?>
-
-            <button class="btn-novo" onclick="abrirModal()">+ Adicionar Novo Livro</button>
-            <div class="search-bar" style="margin-bottom: 20px;">
-                <form method="GET" style="display: flex; gap: 10px; width: 100%;">
-                    <input type="text" name="busca" placeholder="Buscar por título, autor ou editora..." 
-                           value="<?php echo isset($_GET['busca']) ? htmlspecialchars($_GET['busca']) : ''; ?>" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    <button type="submit" class="btn-primary" style="padding: 10px 20px;">Buscar</button>
-                    <?php if (isset($_GET['busca']) && $_GET['busca'] !== ''): ?>
-                        <a href="livros.php" class="btn-secondary" style="padding: 10px 20px; text-decoration: none;">Limpar</a>
-                    <?php endif; ?>
-                </form>
-            </div>
-
-
             <table class="livros-table">
                 <thead>
                     <tr>
@@ -161,13 +125,6 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
                         <th>Autor</th>
                         <th>Categoria</th>
                         <th>Qtd.</th>
-
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Autor</th>
-                        <th>Categoria</th>
-                        <th>Quantidade</th>
-
                         <th>Editora</th>
                         <th>Ações</th>
                     </tr>
@@ -219,43 +176,6 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
             <button class="close-btn" onclick="fecharModal()">×</button>
         </div>
         <div class="modal-body">
-
-                    <?php foreach ($livros as $livro): ?>
-                        <tr>
-                            <td>
-                                <?php if (!empty($livro['imagem'])): ?>
-                                    <img src="../<?php echo htmlspecialchars($livro['imagem']); ?>" alt="Capa" class="capa-thumb">
-                                <?php else: ?>
-                                    <img src="../asset/icones/book-open.svg" alt="Sem capa" class="capa-thumb">
-                                <?php endif; ?>
-                            </td>
-                            <td><?php echo htmlspecialchars($livro['id_livro']); ?></td>
-                            <td><?php echo htmlspecialchars($livro['titulo']); ?></td>
-                            <td><?php echo htmlspecialchars($livro['autor']); ?></td>
-                            <td><?php echo htmlspecialchars($livro['categoria_nome'] ?? 'Sem categoria'); ?></td>
-                            <td><?php echo htmlspecialchars($livro['quantidade']); ?></td>
-                            <td><?php echo htmlspecialchars($livro['editora']); ?></td>
-                            <td>
-                                <?php if (!empty($livro['imagem'])): ?>
-                                    <button class="btn-acao btn-view" onclick="visualizarCapa('../<?php echo htmlspecialchars($livro['imagem']); ?>', '<?php echo addslashes(htmlspecialchars($livro['titulo'])); ?>')">Ver capa</button>
-                                <?php endif; ?>
-                                <button class="btn-acao btn-edit" onclick="editarLivro(<?php echo (int)$livro['id_livro']; ?>)">Editar</button>
-                                <button class="btn-acao btn-delete" onclick="deletarLivro(<?php echo (int)$livro['id_livro']; ?>)">Deletar</button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </main>
-    </div>
-
-    <div id="modal" class="modal <?php echo $livro_edicao ? 'show' : ''; ?>">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-titulo"><?php echo $livro_edicao ? 'Editar Livro' : 'Adicionar Novo Livro'; ?></h2>
-                <button class="close-btn" onclick="fecharModal()">&times;</button>
-            </div>
-
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" id="form-action" value="<?php echo $livro_edicao ? 'atualizar' : 'adicionar'; ?>">
                 <input type="hidden" name="id_livro" id="form-id" value="<?php echo htmlspecialchars($livro_edicao['id_livro'] ?? ''); ?>">
@@ -358,7 +278,7 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
     }
 
     function visualizarCapa(url, titulo) {
-        document.getElementById('cover-modal-image').src   = url;
+        document.getElementById('cover-modal-image').src = url;
         document.getElementById('cover-modal-title').textContent = 'Capa: ' + titulo;
         document.getElementById('cover-modal').classList.add('show');
     }
@@ -376,170 +296,3 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
 </script>
 </body>
 </html>
-
-                <div class="form-group">
-                    <label for="titulo">Título:</label>
-                    <input type="text" id="titulo" name="titulo" required value="<?php echo htmlspecialchars($livro_edicao['titulo'] ?? ''); ?>">
-                </div>
-                <div class="form-group">
-                    <label for="autor">Autor:</label>
-                    <input type="text" id="autor" name="autor" required value="<?php echo htmlspecialchars($livro_edicao['autor'] ?? ''); ?>">
-                </div>
-                <div class="form-group">
-                    <label for="quantidade">Quantidade:</label>
-                    <input type="number" id="quantidade" name="quantidade" required value="<?php echo htmlspecialchars($livro_edicao['quantidade'] ?? ''); ?>">
-                </div>
-                <div class="form-group">
-                    <label for="editora">Editora:</label>
-                    <input type="text" id="editora" name="editora" required value="<?php echo htmlspecialchars($livro_edicao['editora'] ?? ''); ?>">
-                </div>
-                <div class="form-group">
-                    <label for="edicao">Edição:</label>
-                    <input type="text" id="edicao" name="edicao" value="<?php echo htmlspecialchars($livro_edicao['edicao'] ?? ''); ?>">
-                </div>
-                <div class="form-group">
-                    <label for="categoria">Categoria:</label>
-                    <select id="categoria" name="categoria">
-                        <option value="">Sem categoria</option>
-                        <?php foreach ($categorias as $categoria): ?>
-                            <option value="<?php echo (int)$categoria['id_categoria']; ?>" <?php echo isset($livro_edicao['categoria_id']) && $livro_edicao['categoria_id'] == $categoria['id_categoria'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($categoria['nome']); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="imagem">Capa do Livro:</label>
-                    <input type="file" id="imagem" name="imagem" accept="image/*" onchange="mostrarPreviewCapa(this)" />
-
-                    <div id="preview-capa-container" style="margin-top:10px;">
-                        <?php if (!empty($livro_edicao['imagem'])): ?>
-                            <img src="../<?php echo htmlspecialchars($livro_edicao['imagem']); ?>" alt="Capa atual" class="preview-capa" id="preview-capa" />
-                        <?php else: ?>
-                            <img src="" alt="Pré-visualização" class="preview-capa" id="preview-capa" style="display:none;" />
-                        <?php endif; ?>
-                    </div>
-
-                    <div id="capa-selecionada" style="margin-top:10px; font-size: 13px; color: #1d4ed8; display: none;" >
-                        Nova capa selecionada.
-                    </div>
-                    <div style="margin-top:10px; font-size: 13px; color: #374151;">
-                        Selecione uma nova capa e clique em "<?php echo $livro_edicao ? 'Salvar alterações' : 'Salvar'; ?>" para confirmar.
-                    </div>
-                </div>
-
-                <div class="btn-grupo">
-                    <button type="submit" id="btn-salvar-livro" class="btn-primary"><?php echo $livro_edicao ? 'Salvar alterações' : 'Salvar'; ?></button>
-                    <button type="button" class="btn-secondary" onclick="fecharModal()">Cancelar</button>
-                </div>
-
-            </form>
-        </div>
-    </div>
-
-    <div id="cover-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="cover-modal-title">Visualizar Capa</h2>
-                <button class="close-btn" onclick="fecharCoverModal()">&times;</button>
-            </div>
-            <div style="text-align: center;">
-                <img id="cover-modal-image" src="" alt="Capa do livro" style="max-width: 100%; height: auto; border-radius: 8px;" />
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function abrirModal() {
-            document.getElementById('modal').classList.add('show');
-        }
-
-        function fecharModal() {
-            document.getElementById('modal').classList.remove('show');
-        }
-
-        function editarLivro(id) {
-            window.location.href = '?editar=' + id;
-        }
-
-        function deletarLivro(id) {
-            if (confirm('Tem certeza que deseja deletar este livro?')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.innerHTML = '<input type="hidden" name="action" value="deletar"><input type="hidden" name="id_livro" value="' + id + '">';
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-
-        function mostrarPreviewCapa(input) {
-            const preview = document.getElementById('preview-capa');
-            const aviso = document.getElementById('capa-selecionada');
-            const botaoSalvar = document.getElementById('btn-salvar-livro');
-
-            if (!input || !preview) return;
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    if (aviso) {
-                        aviso.textContent = 'Capa selecionada. Clique em "<?php echo $livro_edicao ? 'Salvar alterações' : 'Salvar'; ?>" para confirmar.';
-                        aviso.style.display = 'block';
-                    }
-                    if (botaoSalvar) {
-                        botaoSalvar.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('modal');
-            const coverModal = document.getElementById('cover-modal');
-            if (event.target === modal) {
-                fecharModal();
-            }
-            if (event.target === coverModal) {
-                fecharCoverModal();
-            }
-        }
-
-        function visualizarCapa(url, titulo) {
-            const modal = document.getElementById('cover-modal');
-            const image = document.getElementById('cover-modal-image');
-            const title = document.getElementById('cover-modal-title');
-            if (!modal || !image || !title) return;
-            image.src = url;
-            title.textContent = 'Capa: ' + titulo;
-            modal.classList.add('show');
-        }
-
-        function fecharCoverModal() {
-            const modal = document.getElementById('cover-modal');
-            if (modal) {
-                modal.classList.remove('show');
-            }
-        }
-
-        window.addEventListener('load', function() {
-            const modal = document.getElementById('modal');
-            if (modal && modal.classList.contains('show')) {
-                const content = modal.querySelector('.modal-content');
-                if (content) {
-                    content.scrollTop = 0;
-                }
-            }
-        });
-
-
-        <?php if ($livro_edicao): ?>
-            window.addEventListener('DOMContentLoaded', function() {
-                abrirModal();
-            });
-        <?php endif; ?>
-    </script>
-</body>
-</html>
-
