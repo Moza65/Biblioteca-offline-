@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once "../Buscas/Gerenciadores.php";
 require_once __DIR__ . '/common.php';
 
