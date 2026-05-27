@@ -26,9 +26,17 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
     ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Leitores'],
 
-    ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
+    ['file' => 'verificar_leitor.php', 'icon' => 'user-check.svg', 'label' => 'Verificar Leitor'],
+
+    ['file' => 'registrar_emprestimo.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Registrar Empréstimo'],
+
+    ['file' => 'emprestimos.php', 'icon' => 'list.svg', 'label' => 'Empréstimos'],
 
     ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
+
+    ['file' => 'multas.php', 'icon' => 'alert-circle.svg', 'label' => 'Multas'],
+
+    ['file' => 'comprovativo.php', 'icon' => 'file-text.svg', 'label' => 'Comprovativo'],
 
     ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
 

@@ -36,7 +36,7 @@ $usuario = $_SESSION['usuario'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel do Bibliotecário - Biblioteca Pandora</title>
-    <link rel="stylesheet" href="../asset/style/adm/adm.css">
+    <link rel="stylesheet" href="../asset/style/adm/bibliotec.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -47,13 +47,13 @@ $usuario = $_SESSION['usuario'];
 
         <header class="topbar">
             <div class="welcome-text">
-                <h1>Olá, <?php echo htmlspecialchars($usuario['nome']); ?></h1>
-                <p>Bem-vindo ao sistema de gestão da biblioteca.</p>
+                <h1>Olá, <?php echo htmlspecialchars($usuario['nome']); ?>! 👋</h1>
+                <p>Painel do Bibliotecário - Gerencie as operações da biblioteca</p>
             </div>
             <div class="topbar-actions">
                 <form method="POST" class="search-bar">
                     <img src="../asset/icones/search.svg" class="icon" alt="">
-                    <input type="text" name="campoPesquisa" placeholder="Buscar livros...">
+                    <input type="text" name="campoPesquisa" placeholder="Buscar livro, leitor...">
                     <button name="pesquisar" type="submit" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;"></button>
                 </form>
                 <button class="action-btn">
@@ -63,16 +63,16 @@ $usuario = $_SESSION['usuario'];
             </div>
         </header>
 
-        <!-- KPIs -->
+        <!-- KPIs (Layout 2x2 para bibliotecário) -->
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-icon blue">
                     <img src="../asset/icones/book-copy.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Total de Livros</span>
+                    <span class="kpi-title">Livros em Catálogo</span>
                     <span class="kpi-value"><?php echo isset($put) && is_array($put) ? $put["count(id_livro)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+32 este mês</span>
+                    <span class="kpi-trend positive">Disponíveis para empréstimo</span>
                 </div>
             </div>
             <div class="kpi-card">
@@ -80,9 +80,9 @@ $usuario = $_SESSION['usuario'];
                     <img src="../asset/icones/users.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Leitores Ativos</span>
+                    <span class="kpi-title">Leitores Registrados</span>
                     <span class="kpi-value"><?php echo isset($putLeitores) && is_array($putLeitores) ? $putLeitores["count(id)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+18 este mês</span>
+                    <span class="kpi-trend positive">Usuários ativos no sistema</span>
                 </div>
             </div>
             <div class="kpi-card">
@@ -90,9 +90,9 @@ $usuario = $_SESSION['usuario'];
                     <img src="../asset/icones/arrow-right-left.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Empréstimos</span>
+                    <span class="kpi-title">Empréstimos Ativos</span>
                     <span class="kpi-value"><?php echo isset($putEmprestimo) && is_array($putEmprestimo) ? $putEmprestimo["count(id_emprestimo)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+12 este mês</span>
+                    <span class="kpi-trend positive">Em circulação no momento</span>
                 </div>
             </div>
             <div class="kpi-card">
@@ -100,20 +100,63 @@ $usuario = $_SESSION['usuario'];
                     <img src="../asset/icones/calendar.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Reservas</span>
+                    <span class="kpi-title">Reservas Pendentes</span>
                     <span class="kpi-value"><?php echo isset($putReserva) && is_array($putReserva) ? $putReserva["count(id_reserva)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+2 este mês</span>
+                    <span class="kpi-trend positive">Aguardando disponibilidade</span>
                 </div>
             </div>
         </div>
 
         <!-- ALERTA ATRASADOS -->
         <?php if ($total_atrasados > 0): ?>
-            <div class="alert erro" style="margin-top:24px;">
+            <div class="alert erro" style="margin-top:0;">
                 ⚠️ <strong><?php echo $total_atrasados; ?> Empréstimo(s) Atrasado(s)</strong>
-                — <a href="emprestimos.php" style="color:var(--danger);">Ver detalhes</a>
+                — <a href="emprestimos.php" style="color:var(--danger);">Ver detalhes e enviar notificações</a>
             </div>
         <?php endif; ?>
+
+        <!-- AÇÕES RÁPIDAS DO BIBLIOTECÁRIO -->
+        <div style="padding: 32px; padding-top: 0;">
+            <h3 style="font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 18px;">Operações Frequentes</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+                <a href="registrar_emprestimo.php" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; color: white; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📤</div>
+                        <div style="font-weight: 600; font-size: 14px;">Registrar Empréstimo</div>
+                    </div>
+                </a>
+                <a href="devolucao.php" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; padding: 20px; color: white; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(245, 87, 108, 0.3);">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📥</div>
+                        <div style="font-weight: 600; font-size: 14px;">Registrar Devolução</div>
+                    </div>
+                </a>
+                <a href="verificar_leitor.php" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 12px; padding: 20px; color: white; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);">
+                        <div style="font-size: 32px; margin-bottom: 8px;">🔍</div>
+                        <div style="font-weight: 600; font-size: 14px;">Verificar Leitor</div>
+                    </div>
+                </a>
+                <a href="multas.php" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 12px; padding: 20px; color: white; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(250, 112, 154, 0.3);">
+                        <div style="font-size: 32px; margin-bottom: 8px;">💰</div>
+                        <div style="font-weight: 600; font-size: 14px;">Gestão de Multas</div>
+                    </div>
+                </a>
+                <a href="comprovativo.php" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border-radius: 12px; padding: 20px; color: white; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(48, 207, 208, 0.3);">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📄</div>
+                        <div style="font-weight: 600; font-size: 14px;">Emitir Comprovativo</div>
+                    </div>
+                </a>
+                <a href="livros.php" style="text-decoration: none;">
+                    <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 12px; padding: 20px; color: white; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(67, 233, 123, 0.3);">
+                        <div style="font-size: 32px; margin-bottom: 8px;">📚</div>
+                        <div style="font-weight: 600; font-size: 14px;">Gerenciar Livros</div>
+                    </div>
+                </a>
+            </div>
+        </div>
 
         <!-- RESULTADOS DA PESQUISA -->
         <?php if (!empty($pesquisaEncontrada) && is_array($pesquisaEncontrada)): ?>
