@@ -44,7 +44,7 @@ $total = count($leitores);
         <title>Leitores - Biblioteca Pandora</title>
         <link rel="stylesheet" href="../asset/style/adm/adm.css">
         <link rel="stylesheet" href="../asset/style/adm/leitores.css">
-        <link rel="stylesheet" href="../asset/style/adm/modal.css">
+        <link rel="stylesheet" href="../asset/style/adm/modal_leitore.css">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     </head>
     <body>

@@ -66,7 +66,12 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
     <title>Livros - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link rel="stylesheet" href="../asset/style/adm/livros.css">
+    <link rel="stylesheet" href="../asset/style/adm/modal_livros.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+    </style>
 </head>
 <body>
 <div class="dashboard-container">
@@ -83,6 +88,17 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
                 </div>
                 <p>Adicione, edite ou remova livros do acervo</p>
             </div>
+
+            <!-- Botão Adicionar Livro na topbar -->
+            <div class="topbar-actions">
+                <button class="btn-primary" onclick="abrirModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Adicionar Livro
+                </button>
+            </div>
         </header>
 
         <!-- ALERTA -->
@@ -92,9 +108,8 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
             </div>
         <?php endif; ?>
 
-        <!-- TOOLBAR -->
+        <!-- TOOLBAR (só busca) -->
         <div class="toolbar">
-            <button class="btn-primary" onclick="abrirModal()">+ Adicionar Livro</button>
             <form method="GET" class="search-form">
                 <img src="../asset/icones/search.svg" alt="">
                 <input
@@ -114,7 +129,9 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
         <div class="table-card">
             <div class="table-card-header">
                 <h2>Acervo de Livros</h2>
-                <span><?php echo count($livros); ?> livro<?php echo count($livros) !== 1 ? 's' : ''; ?></span>
+                <span class="count-badge">
+                    <?php echo count($livros); ?> livro<?php echo count($livros) !== 1 ? 's' : ''; ?>
+                </span>
             </div>
 
             <table class="livros-table">
@@ -148,10 +165,19 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
                                 <td>
                                     <div class="action-btns">
                                         <?php if (!empty($livro['imagem'])): ?>
-                                            <button class="btn-acao btn-view" onclick="visualizarCapa('../<?php echo htmlspecialchars($livro['imagem']); ?>', '<?php echo addslashes(htmlspecialchars($livro['titulo'])); ?>')">Ver capa</button>
+                                            <button class="btn-acao btn-view"
+                                                onclick="visualizarCapa('../<?php echo htmlspecialchars($livro['imagem']); ?>', '<?php echo addslashes(htmlspecialchars($livro['titulo'])); ?>')">
+                                                Ver capa
+                                            </button>
                                         <?php endif; ?>
-                                        <button class="btn-acao btn-edit" onclick="editarLivro(<?php echo (int)$livro['id_livro']; ?>)">Editar</button>
-                                        <button class="btn-acao btn-delete" onclick="deletarLivro(<?php echo (int)$livro['id_livro']; ?>)">Deletar</button>
+                                        <button class="btn-acao btn-edit"
+                                            onclick="editarLivro(<?php echo (int)$livro['id_livro']; ?>)">
+                                            Editar
+                                        </button>
+                                        <button class="btn-acao btn-delete"
+                                            onclick="deletarLivro(<?php echo (int)$livro['id_livro']; ?>)">
+                                            Deletar
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -168,82 +194,132 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
     </main>
 </div>
 
-<!-- MODAL ADICIONAR / EDITAR -->
+<!-- ══════════════ MODAL ADICIONAR / EDITAR ══════════════ -->
 <div id="modal" class="modal <?php echo $livro_edicao ? 'show' : ''; ?>">
     <div class="modal-content">
+
         <div class="modal-header">
-            <h2 id="modal-titulo"><?php echo $livro_edicao ? 'Editar Livro' : 'Adicionar Novo Livro'; ?></h2>
-            <button class="close-btn" onclick="fecharModal()">×</button>
+            <h2 id="modal-titulo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                     style="vertical-align:-3px; margin-right:6px; color:var(--primary)">
+                    <?php if ($livro_edicao): ?>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    <?php else: ?>
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    <?php endif; ?>
+                </svg>
+                <?php echo $livro_edicao ? 'Editar Livro' : 'Adicionar Novo Livro'; ?>
+            </h2>
+            <button class="close-btn" onclick="fecharModal()" aria-label="Fechar">×</button>
         </div>
+
         <div class="modal-body">
             <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="action" id="form-action" value="<?php echo $livro_edicao ? 'atualizar' : 'adicionar'; ?>">
-                <input type="hidden" name="id_livro" id="form-id" value="<?php echo htmlspecialchars($livro_edicao['id_livro'] ?? ''); ?>">
-                <input type="hidden" name="imagem_atual" id="imagem-atual" value="<?php echo htmlspecialchars($livro_edicao['imagem'] ?? ''); ?>">
+                <input type="hidden" name="action"        id="form-action"    value="<?php echo $livro_edicao ? 'atualizar' : 'adicionar'; ?>">
+                <input type="hidden" name="id_livro"      id="form-id"        value="<?php echo htmlspecialchars($livro_edicao['id_livro'] ?? ''); ?>">
+                <input type="hidden" name="imagem_atual"  id="imagem-atual"   value="<?php echo htmlspecialchars($livro_edicao['imagem'] ?? ''); ?>">
 
-                <div class="modal-form-group">
-                    <label for="titulo">Título</label>
-                    <input type="text" id="titulo" name="titulo" placeholder="Ex: Dom Casmurro" required value="<?php echo htmlspecialchars($livro_edicao['titulo'] ?? ''); ?>">
+                <!-- Título e Autor lado a lado -->
+                <div class="modal-form-row">
+                    <div class="modal-form-group">
+                        <label for="titulo">Título <span style="color:var(--danger)">*</span></label>
+                        <input type="text" id="titulo" name="titulo"
+                               placeholder="Ex: Dom Casmurro" required
+                               value="<?php echo htmlspecialchars($livro_edicao['titulo'] ?? ''); ?>">
+                    </div>
+                    <div class="modal-form-group">
+                        <label for="autor">Autor <span style="color:var(--danger)">*</span></label>
+                        <input type="text" id="autor" name="autor"
+                               placeholder="Ex: Machado de Assis" required
+                               value="<?php echo htmlspecialchars($livro_edicao['autor'] ?? ''); ?>">
+                    </div>
                 </div>
-                <div class="modal-form-group">
-                    <label for="autor">Autor</label>
-                    <input type="text" id="autor" name="autor" placeholder="Ex: Machado de Assis" required value="<?php echo htmlspecialchars($livro_edicao['autor'] ?? ''); ?>">
+
+                <!-- Editora e Edição lado a lado -->
+                <div class="modal-form-row">
+                    <div class="modal-form-group">
+                        <label for="editora">Editora <span style="color:var(--danger)">*</span></label>
+                        <input type="text" id="editora" name="editora"
+                               placeholder="Ex: Companhia das Letras" required
+                               value="<?php echo htmlspecialchars($livro_edicao['editora'] ?? ''); ?>">
+                    </div>
+                    <div class="modal-form-group">
+                        <label for="edicao">Edição</label>
+                        <input type="text" id="edicao" name="edicao"
+                               placeholder="Ex: 1ª Edição"
+                               value="<?php echo htmlspecialchars($livro_edicao['edicao'] ?? ''); ?>">
+                    </div>
                 </div>
-                <div class="modal-form-group">
-                    <label for="editora">Editora</label>
-                    <input type="text" id="editora" name="editora" placeholder="Ex: Companhia das Letras" required value="<?php echo htmlspecialchars($livro_edicao['editora'] ?? ''); ?>">
+
+                <!-- Quantidade e Categoria lado a lado -->
+                <div class="modal-form-row">
+                    <div class="modal-form-group">
+                        <label for="quantidade">Quantidade <span style="color:var(--danger)">*</span></label>
+                        <input type="number" id="quantidade" name="quantidade"
+                               min="0" placeholder="Ex: 5" required
+                               value="<?php echo htmlspecialchars($livro_edicao['quantidade'] ?? ''); ?>">
+                    </div>
+                    <div class="modal-form-group">
+                        <label for="categoria">Categoria</label>
+                        <select id="categoria" name="categoria">
+                            <option value="">Sem categoria</option>
+                            <?php foreach ($categorias as $cat): ?>
+                                <option value="<?php echo (int)$cat['id_categoria']; ?>"
+                                    <?php echo isset($livro_edicao['categoria_id']) && $livro_edicao['categoria_id'] == $cat['id_categoria'] ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($cat['nome']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-                <div class="modal-form-group">
-                    <label for="edicao">Edição</label>
-                    <input type="text" id="edicao" name="edicao" placeholder="Ex: 1ª Edição" value="<?php echo htmlspecialchars($livro_edicao['edicao'] ?? ''); ?>">
-                </div>
-                <div class="modal-form-group">
-                    <label for="quantidade">Quantidade</label>
-                    <input type="number" id="quantidade" name="quantidade" min="0" placeholder="Ex: 5" required value="<?php echo htmlspecialchars($livro_edicao['quantidade'] ?? ''); ?>">
-                </div>
-                <div class="modal-form-group">
-                    <label for="categoria">Categoria</label>
-                    <select id="categoria" name="categoria">
-                        <option value="">Sem categoria</option>
-                        <?php foreach ($categorias as $cat): ?>
-                            <option value="<?php echo (int)$cat['id_categoria']; ?>" <?php echo isset($livro_edicao['categoria_id']) && $livro_edicao['categoria_id'] == $cat['id_categoria'] ? 'selected' : ''; ?>>
-                                <?php echo htmlspecialchars($cat['nome']); ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+
+                <!-- Capa -->
                 <div class="modal-form-group">
                     <label for="imagem">Capa do Livro</label>
-                    <input type="file" id="imagem" name="imagem" accept="image/*" onchange="mostrarPreviewCapa(this)">
+                    <input type="file" id="imagem" name="imagem"
+                           accept="image/*" onchange="mostrarPreviewCapa(this)">
                     <?php if (!empty($livro_edicao['imagem'])): ?>
-                        <img src="../<?php echo htmlspecialchars($livro_edicao['imagem']); ?>" alt="Capa actual" class="preview-capa" id="preview-capa">
+                        <img src="../<?php echo htmlspecialchars($livro_edicao['imagem']); ?>"
+                             alt="Capa actual" class="preview-capa" id="preview-capa">
                     <?php else: ?>
-                        <img src="" alt="Pré-visualização" class="preview-capa" id="preview-capa" style="display:none;">
+                        <img src="" alt="Pré-visualização" class="preview-capa"
+                             id="preview-capa" style="display:none;">
                     <?php endif; ?>
-                    <span class="capa-selecionada-aviso" id="capa-selecionada">Nova capa selecionada.</span>
+                    <span class="capa-selecionada-aviso" id="capa-selecionada">✓ Nova capa selecionada.</span>
                     <span class="capa-hint">Formatos aceites: JPG, PNG, GIF, WEBP</span>
                 </div>
 
                 <div class="modal-actions">
-                    <button type="submit" id="btn-salvar-livro" class="btn-primary">
-                        <?php echo $livro_edicao ? '✓ Salvar alterações' : '+ Adicionar Livro'; ?>
-                    </button>
                     <button type="button" class="btn-secondary" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none"
+                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V7l-4-4z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M17 3v4H8V3M12 12v5m-2-2h4"/>
+                        </svg>
+                        <?php echo $livro_edicao ? 'Salvar alterações' : 'Adicionar Livro'; ?>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- MODAL VER CAPA -->
+<!-- ══════════════ MODAL VER CAPA ══════════════ -->
 <div id="cover-modal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width:400px;">
         <div class="modal-header">
             <h2 id="cover-modal-title">Capa do Livro</h2>
-            <button class="close-btn" onclick="fecharCoverModal()">×</button>
+            <button class="close-btn" onclick="fecharCoverModal()" aria-label="Fechar">×</button>
         </div>
         <div class="modal-body" style="text-align:center; padding-top:0;">
-            <img id="cover-modal-image" src="" alt="Capa" style="max-width:100%; border-radius:10px; border:1px solid var(--gray-200);">
+            <img id="cover-modal-image" src="" alt="Capa"
+                 style="max-width:100%; border-radius:10px; border:1px solid var(--gray-200); box-shadow:0 4px 16px rgba(92,59,30,.12);">
         </div>
     </div>
 </div>
@@ -257,7 +333,9 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
         if (confirm('Tem certeza que deseja deletar este livro?')) {
             const form = document.createElement('form');
             form.method = 'POST';
-            form.innerHTML = '<input type="hidden" name="action" value="deletar"><input type="hidden" name="id_livro" value="' + id + '">';
+            form.innerHTML =
+                '<input type="hidden" name="action"   value="deletar">' +
+                '<input type="hidden" name="id_livro" value="' + id + '">';
             document.body.appendChild(form);
             form.submit();
         }
@@ -283,11 +361,22 @@ if (isset($_GET['editar'])) $livro_edicao = $gerenciador->obterPorId($_GET['edit
         document.getElementById('cover-modal').classList.add('show');
     }
 
-    function fecharCoverModal() { document.getElementById('cover-modal').classList.remove('show'); }
+    function fecharCoverModal() {
+        document.getElementById('cover-modal').classList.remove('show');
+    }
 
+    // Fechar clicando fora do card
     window.addEventListener('click', e => {
         if (e.target === document.getElementById('modal'))       fecharModal();
         if (e.target === document.getElementById('cover-modal')) fecharCoverModal();
+    });
+
+    // Fechar com ESC
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            fecharModal();
+            fecharCoverModal();
+        }
     });
 
     <?php if ($livro_edicao): ?>
