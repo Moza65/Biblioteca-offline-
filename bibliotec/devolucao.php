@@ -5,6 +5,7 @@ require_once __DIR__ . '/common.php';
 $gerenciador = new GerenciadorDevolucoes();
 $mensagem    = '';
 $tipoAlerta  = '';
+$valorMultaDia = 0.50;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'devolver') {
     try {
@@ -53,7 +54,8 @@ $devolvidos = $gerenciador->listarDevolvidos();
         <?php endif; ?>
 
         <div class="info-box">
-            Aqui pode ver os empréstimos pendentes e registar devoluções rapidamente.
+            Aqui pode ver os empréstimos pendentes, verificar atrasos e calcular multas.
+            Multa diária: <strong>€<?php echo number_format($valorMultaDia, 2); ?></strong> por dia de atraso.
         </div>
 
         <!-- PENDENTES -->
@@ -69,19 +71,29 @@ $devolvidos = $gerenciador->listarDevolvidos();
                         <th>Livro</th>
                         <th>Data Empréstimo</th>
                         <th>Previsão</th>
+                        <th>Dias de Atraso</th>
+                        <th>Multa Estimada</th>
                         <th>Status</th>
                         <th>Ação</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (count($pendentes) > 0): ?>
-                        <?php foreach ($pendentes as $item): ?>
+                        <?php foreach ($pendentes as $item):
+                            $dataPrevista = strtotime($item['data_prevista']);
+                            $diasAtraso = max(0, floor((time() - $dataPrevista) / 86400));
+                            $multaEstimativa = $diasAtraso * $valorMultaDia;
+                            $statusLabel = $diasAtraso > 0 ? 'Atrasado' : 'Pendente';
+                            $statusClass = $diasAtraso > 0 ? 'atrasado' : 'pendente';
+                        ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($item['leitor']); ?></td>
                                 <td><?php echo htmlspecialchars($item['titulo_livro']); ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($item['data_emprestimo'])); ?></td>
                                 <td><?php echo date('d/m/Y', strtotime($item['data_prevista'])); ?></td>
-                                <td><span class="badge-status pendente">Pendente</span></td>
+                                <td><?php echo $diasAtraso; ?></td>
+                                <td>€<?php echo number_format($multaEstimativa, 2); ?></td>
+                                <td><span class="badge-status <?php echo $statusClass; ?>"><?php echo $statusLabel; ?></span></td>
                                 <td>
                                     <form method="POST" style="margin:0;">
                                         <input type="hidden" name="action" value="devolver">
@@ -93,7 +105,7 @@ $devolvidos = $gerenciador->listarDevolvidos();
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" class="table-empty">Nenhum empréstimo pendente encontrado.</td>
+                            <td colspan="8" class="table-empty">Nenhum empréstimo pendente encontrado.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

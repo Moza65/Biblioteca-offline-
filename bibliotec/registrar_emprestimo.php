@@ -8,26 +8,40 @@ $gerenciadorLivros = new GerenciadorLivros();
 $gerenciadorLeitores = new GerenciadorLeitores();
 $mensagem = '';
 $tipoAlerta = '';
+$ultimoEmprestimoId = null;
 $limiteEmprestimoPorLeitor = 5; // Limite máximo de empréstimos simultâneos
 
 // Buscar livros disponíveis
 $livrosDisponiveis = [];
+$livrosQuantidade = [];
 try {
-    $sql = $pdo->prepare("SELECT id_livro, titulo, autor, quantidade FROM livro WHERE quantidade > 0 ORDER BY titulo");
+    $sql = $pdo->prepare("SELECT id_livro, titulo, autor, quantidade FROM livro ORDER BY titulo");
     $sql->execute();
     $livrosDisponiveis = $sql->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($livrosDisponiveis as $livro) {
+        $livrosQuantidade[$livro['id_livro']] = (int)$livro['quantidade'];
+    }
 } catch (Exception $e) {
     $livrosDisponiveis = [];
 }
 
 // Buscar leitores
 $leitores = [];
+$emprestimosAtivosPorLeitor = [];
 try {
     $sql = $pdo->prepare("SELECT id, nome, email FROM leitor ORDER BY nome");
     $sql->execute();
     $leitores = $sql->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = $pdo->prepare("SELECT e.id_emprestimo_leitor, COUNT(*) AS total FROM emprestimo e LEFT JOIN devolucao d ON e.id_emprestimo = d.id_emprestimo WHERE d.id_devolucao IS NULL GROUP BY e.id_emprestimo_leitor");
+    $sql->execute();
+    $ativos = $sql->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($ativos as $item) {
+        $emprestimosAtivosPorLeitor[$item['id_emprestimo_leitor']] = (int)$item['total'];
+    }
 } catch (Exception $e) {
     $leitores = [];
+    $emprestimosAtivosPorLeitor = [];
 }
 
 // Processar formulário de registrar empréstimo
@@ -61,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         
         $usuario_id = $_SESSION['usuario']['id_usuario'] ?? 1;
         $sqlInsert->execute([$usuario_id, $id_livro, $id_leitor, $data_prevista, $data_emprestimo]);
+        $ultimoEmprestimoId = $pdo->lastInsertId();
         
         // Reduzir quantidade de livros
         $sqlUpdateLivro = $pdo->prepare("UPDATE livro SET quantidade = quantidade - 1 WHERE id_livro = ?");
@@ -240,7 +255,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <select id="id_livro" name="id_livro" required>
                         <option value="">-- Escolha um livro --</option>
                         <?php foreach ($livrosDisponiveis as $livro): ?>
-                            <option value="<?php echo (int)$livro['id_livro']; ?>">
+                            <option value="<?php echo (int)$livro['id_livro']; ?>" data-quantidade="<?php echo (int)$livro['quantidade']; ?>">
                                 <?php echo htmlspecialchars($livro['titulo']); ?> - <?php echo htmlspecialchars($livro['autor']); ?> (<?php echo (int)$livro['quantidade']; ?> disp.)
                             </option>
                         <?php endforeach; ?>
@@ -248,8 +263,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 </div>
 
                 <div class="form-group">
+                    <label>Disponibilidade</label>
+                    <div id="livro-disponibilidade" style="font-size:14px;color:var(--gray-700);">Selecione um livro para ver disponibilidade.</div>
+                </div>
+
+                <div class="form-group">
                     <label for="dias_duracao">Duração em Dias</label>
                     <input type="number" id="dias_duracao" name="dias_duracao" value="14" min="1" max="30">
+                </div>
+
+                <div class="form-group">
+                    <label>Limite de empréstimos</label>
+                    <div id="limite-emprestimos" style="font-size:14px;color:var(--gray-700);">Selecione um leitor para ver o limite.</div>
                 </div>
 
                 <div class="form-actions">
@@ -257,8 +282,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <a href="emprestimos.php" class="btn btn-secondary" style="text-decoration: none;">← Voltar</a>
                 </div>
             </form>
+
+            <?php if (!empty($ultimoEmprestimoId)): ?>
+                <div class="form-group" style="margin-top:20px;">
+                    <label>Emitir comprovativo</label>
+                    <a href="comprovativo.php?id_emprestimo=<?php echo $ultimoEmprestimoId; ?>" class="btn btn-primary" style="display:inline-block;">Gerar comprovativo</a>
+                </div>
+            <?php endif; ?>
         </div>
     </main>
 </div>
+
+<script>
+    const readerLoanCounts = <?php echo json_encode($emprestimosAtivosPorLeitor); ?>;
+    const bookQuantities = <?php echo json_encode($livrosQuantidade); ?>;
+    const limitPerReader = <?php echo $limiteEmprestimoPorLeitor; ?>;
+
+    function atualizarInfo() {
+        const leitorSelect = document.getElementById('id_leitor');
+        const livroSelect = document.getElementById('id_livro');
+        const leitorInfo = document.getElementById('limite-emprestimos');
+        const livroInfo = document.getElementById('livro-disponibilidade');
+
+        const leitorId = parseInt(leitorSelect.value, 10);
+        const livroId = parseInt(livroSelect.value, 10);
+
+        if (leitorId && readerLoanCounts[leitorId] !== undefined) {
+            const ativo = readerLoanCounts[leitorId];
+            leitorInfo.textContent = `${ativo} empréstimo(s) ativo(s) / ${limitPerReader} limite`; 
+            leitorInfo.style.color = ativo >= limitPerReader ? 'var(--danger)' : 'var(--gray-700)';
+        } else if (leitorId) {
+            leitorInfo.textContent = `0 empréstimos ativos / ${limitPerReader} limite`;
+            leitorInfo.style.color = 'var(--gray-700)';
+        } else {
+            leitorInfo.textContent = 'Selecione um leitor para ver o limite.';
+            leitorInfo.style.color = 'var(--gray-700)';
+        }
+
+        if (livroId && bookQuantities[livroId] !== undefined) {
+            const quantidade = bookQuantities[livroId];
+            livroInfo.textContent = `${quantidade} unidade(s) disponível(is)`;
+            livroInfo.style.color = quantidade > 0 ? 'var(--secondary)' : 'var(--danger)';
+        } else {
+            livroInfo.textContent = 'Selecione um livro para ver disponibilidade.';
+            livroInfo.style.color = 'var(--gray-700)';
+        }
+    }
+
+    document.getElementById('id_leitor').addEventListener('change', atualizarInfo);
+    document.getElementById('id_livro').addEventListener('change', atualizarInfo);
+
+    atualizarInfo();
+</script>
 </body>
 </html>
