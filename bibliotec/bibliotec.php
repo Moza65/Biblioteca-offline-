@@ -4,7 +4,7 @@ require_once "../Buscas/buscarDados.php";
 session_start();
 
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login/login.php");
+    header("Location: ../logout.php");
     exit();
 }
 
@@ -37,7 +37,7 @@ $usuario = $_SESSION['usuario'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
     <title>Painel do Bibliotecário - Biblioteca Pandora</title>
- 
+    <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>

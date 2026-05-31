@@ -18,7 +18,6 @@ $stmt = $pdo->prepare($sql);
 
 // Executa
 $stmt->execute([$email, $senha]);
-
 // Busca usuário
 $usuario = $stmt->fetch();
 
@@ -30,11 +29,19 @@ if ($usuario) {
 
     // Verifica tipo de usuário
     if ($usuario['tipo_usuario'] == 'admin') {
-
+        $_SESSION["id_usuario"] =   $usuario["id_usuario"];
+        $_SESSION["nome"] =   $usuario["nome"];
+        $_SESSION["cantato"] =   $usuario["contato"];
+        $_SESSION["tipo_usuario"] =   $usuario["tipo_usuario"];
+        $_SESSION["email"] =   $usuario["email"];
         header("Location: ../adm/adm.php");
 
     } elseif ($usuario['tipo_usuario'] == 'bibliotecario') {
-
+        $_SESSION["id_usuario"] =   $usuario["id_usuario"];
+        $_SESSION["nome"] =   $usuario["nome"];
+        $_SESSION["cantato"] =   $usuario["contato"];
+        $_SESSION["tipo_usuario"] =   $usuario["tipo_usuario"];
+        $_SESSION["email"] =   $usuario["email"];
         header("Location: ../bibliotec/bibliotec.php");
 
     }

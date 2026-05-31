@@ -1,7 +1,10 @@
 <?php
 require_once "../Buscas/Gerenciadores.php";
 require_once __DIR__ . '/common.php';
-
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../logout.php");
+    exit();
+}
 $gerenciador = new GerenciadorDevolucoes();
 $mensagem    = '';
 $tipoAlerta  = '';

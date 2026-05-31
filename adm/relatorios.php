@@ -159,7 +159,7 @@ try {
                 <table class="report-table">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th hidden>#</th>
                             <th>Livro</th>
                             <th>Leitor</th>
                             <th>Data Empréstimo</th>
@@ -171,7 +171,7 @@ try {
                         <?php if (count($atrasados) > 0): ?>
                             <?php foreach ($atrasados as $item): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
+                                    <td hidden><?php echo htmlspecialchars($item['id_emprestimo']); ?></td>
                                     <td><?php echo htmlspecialchars($item['livro']); ?></td>
                                     <td><?php echo htmlspecialchars($item['leitor']); ?></td>
                                     <td><?php echo date('d/m/Y', strtotime($item['data_emprestimo'] ?? 'now')); ?></td>
@@ -196,7 +196,7 @@ try {
                 <span class="report-label">Top livros mais emprestados</span>
                 <table class="report-table">
                     <thead>
-                        <tr><th>#</th><th>Livro</th><th>Total</th></tr>
+                        <tr><th>N</th><th>Livro</th><th>Total</th></tr>
                     </thead>
                     <tbody>
                         <?php if (count($topLivros) > 0): ?>
@@ -218,7 +218,7 @@ try {
                 <span class="report-label">Top livros mais reservados</span>
                 <table class="report-table">
                     <thead>
-                        <tr><th>#</th><th>Livro</th><th>Total</th></tr>
+                        <tr><th>N</th><th>Livro</th><th>Total</th></tr>
                     </thead>
                     <tbody>
                         <?php if (count($topReservados) > 0): ?>

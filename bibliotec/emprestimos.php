@@ -1,7 +1,10 @@
 <?php
 require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/common.php';
-
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../logout.php");
+    exit();
+}
 try {
     $sql = $pdo->prepare("
         SELECT e.*, li.titulo AS titulo_livro, d.data_devolucao

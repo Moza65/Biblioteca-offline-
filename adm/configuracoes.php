@@ -158,7 +158,7 @@ $settings = json_decode(file_get_contents($configPath), true) ?: [];
                         <div class="form-field">
                             <label for="fine_per_day">Multa por Dia de Atraso</label>
                             <div class="input-prefix-wrapper">
-                                <span class="input-prefix">R$</span>
+                                <span class="input-prefix">KZ</span>
                                 <input
                                     type="text"
                                     id="fine_per_day"

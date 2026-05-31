@@ -57,7 +57,7 @@ $total = count($leitores);
                                 $iniciais = strtoupper(mb_substr($leitor['nome'] ?? '?', 0, 1));
                             ?>
                                 <tr>
-                                    <td class="col-id">#<?php echo htmlspecialchars($leitor['id']); ?></td>
+                                    <td hidden class="col-id"><?php echo htmlspecialchars($leitor['id']); ?></td>
                                     <td>
                                         <div class="leitor-nome-cell">
                                             <span class="leitor-avatar"><?php echo $iniciais; ?></span>

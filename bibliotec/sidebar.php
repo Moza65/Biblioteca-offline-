@@ -34,7 +34,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
     ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
 
-    ['file' => 'logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
+    ['file' => '../logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
 
 ];
 
