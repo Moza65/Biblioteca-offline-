@@ -63,7 +63,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
             <div class="user-info">
                 <span class="user-name"><?php echo isset($usuario['email']) ? htmlspecialchars($usuario['email']) : 'Administrador'; ?></span>
-                <span class="user-email">Administrador</span>
+                <span class="user-email">Bibliotecário</span>
             </div>
         </div>
     </div>
