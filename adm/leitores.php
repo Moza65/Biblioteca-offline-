@@ -1,11 +1,19 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../Buscas/buscarDados.php';
 require_once __DIR__ . '/common.php';
 
+$callClass = new BuscarDados();
+$searchTerm = trim($_GET['busca'] ?? '');
+
 try {
-    $sql = $pdo->prepare("SELECT * FROM leitor ORDER BY id DESC");
-    $sql->execute();
-    $leitores = $sql->fetchAll(PDO::FETCH_ASSOC);
+    if ($searchTerm !== '') {
+        $leitores = $callClass->GetReady($searchTerm);
+    } else {
+        $sql = $pdo->prepare("SELECT * FROM leitor ORDER BY id DESC");
+        $sql->execute();
+        $leitores = $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
 } catch (Exception $ex) {
     $leitores = [];
 }

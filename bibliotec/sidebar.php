@@ -16,9 +16,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
     <nav class="sidebar-nav">
         <?php
+        // Escolhe o arquivo do dashboard conforme o tipo de usuário (fallback para bibliotec.php)
+        $dashboardFile = 'bibliotec.php';
+        if (isset($usuario['tipo_usuario']) && $usuario['tipo_usuario'] === 'admin') {
+            $dashboardFile = 'adm.php';
+        }
+
        $items = [
 
-    ['file' => 'bibliotec.php', 'icon' => 'home.svg', 'label' => 'Dashboard'],
+    ['file' => $dashboardFile, 'icon' => 'home.svg', 'label' => 'Dashboard'],
 
     ['file' => 'categorias.php', 'icon' => 'file-text.svg', 'label' => 'Categorias'],
 
@@ -26,7 +32,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
     ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Leitores'],
 
-    ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
+    ['file' => 'registrar_emprestimo.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Registrar Empréstimo'],
+
+    ['file' => 'emprestimos.php', 'icon' => 'list.svg', 'label' => 'Empréstimos'],
 
     ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
 

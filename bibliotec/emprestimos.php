@@ -1,20 +1,35 @@
 <?php
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../Buscas/buscarDados.php';
 require_once __DIR__ . '/common.php';
+
 if (!isset($_SESSION['usuario'])) {
     header("Location: ../logout.php");
     exit();
 }
+
+
+$callClass = new BuscarDados();
+$searchTerm = trim($_GET['busca'] ?? '');
+$emprestimoId = isset($_GET['id_emprestimo']) ? (int)$_GET['id_emprestimo'] : 0;
+
+
 try {
-    $sql = $pdo->prepare("
-        SELECT e.*, li.titulo AS titulo_livro, d.data_devolucao
-        FROM emprestimo e
-        LEFT JOIN livro li ON e.fk_Livro_id_livro = li.id_livro
-        LEFT JOIN devolucao d ON e.id_emprestimo = d.id_emprestimo
-        ORDER BY e.data_emprestimo DESC
-    ");
-    $sql->execute();
-    $emprestimos = $sql->fetchAll(PDO::FETCH_ASSOC);
+    if ($emprestimoId > 0) {
+        $emprestimos = $callClass->GetBroard($emprestimoId);
+    } elseif ($searchTerm !== '') {
+        $emprestimos = $callClass->GetBroard($searchTerm);
+    } else {
+        $sql = $pdo->prepare("
+            SELECT e.*, li.titulo AS titulo_livro, d.data_devolucao
+            FROM emprestimo e
+            LEFT JOIN livro li ON e.fk_Livro_id_livro = li.id_livro
+            LEFT JOIN devolucao d ON e.id_emprestimo = d.id_emprestimo
+            ORDER BY e.data_emprestimo DESC
+        ");
+        $sql->execute();
+        $emprestimos = $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
 } catch (Exception $ex) {
     $emprestimos = [];
 }

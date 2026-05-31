@@ -22,9 +22,43 @@ $putReserva    = $callClass->QuantidadeReserva();
 
 require_once __DIR__ . '/common.php';
 
-$pesquisaEncontrada = [];
-if (isset($_POST['pesquisar']) && !empty($_POST['campoPesquisa'])) {
-    $pesquisaEncontrada = $callClass->ShowSerach($_POST['campoPesquisa']);
+$pesquisaEncontrada = ['type' => 'empty', 'items' => []];
+$searchResults = [];
+$searchMessage = '';
+$searchTerm = '';
+
+if (isset($_POST['pesquisar'])) {
+    $searchTerm = trim($_POST['campoPesquisa'] ?? '');
+    if ($searchTerm !== '') {
+        $pesquisaEncontrada = $callClass->ShowSerach($searchTerm);
+        if (!empty($pesquisaEncontrada['items'])) {
+            $searchResults = $pesquisaEncontrada['items'];
+        } else {
+            if (!empty($pesquisaEncontrada['message'])) {
+                $searchMessage = $pesquisaEncontrada['message'];
+            } elseif ($pesquisaEncontrada['type'] === 'empty') {
+                $searchMessage = 'Digite algum termo para pesquisar.';
+            } else {
+                $searchMessage = 'Nenhum resultado encontrado.';
+            }
+        }
+    } else {
+        $searchMessage = 'Digite algum termo para pesquisar.';
+    }
+}
+
+function buildSearchUrl($type, $item, $searchTerm) {
+    $term = urlencode($searchTerm);
+    if ($type === 'livro') {
+        return 'livros.php?busca=' . $term;
+    }
+    if ($type === 'leitor') {
+        return !empty($item['id']) ? 'leitores.php?id_leitor=' . (int)$item['id'] : 'leitores.php?busca=' . $term;
+    }
+    if ($type === 'emprestimo') {
+        return !empty($item['id_emprestimo']) ? 'emprestimos.php?id_emprestimo=' . (int)$item['id_emprestimo'] : 'emprestimos.php?busca=' . $term;
+    }
+    return 'bibliotec.php';
 }
 
 $total_atrasados = 0;
@@ -39,6 +73,121 @@ $usuario = $_SESSION['usuario'];
     <title>Painel do Bibliotecário - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .clickable-row { cursor: pointer; }
+        .clickable-row:hover { background: rgba(59, 130, 246, 0.06); }
+        .result-link { color: inherit; text-decoration: none; }
+        .table-card .alert { margin: 0; }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin: 32px;
+        }
+        .kpi-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 28px rgba(92, 59, 30, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 32px rgba(92, 59, 30, 0.12);
+        }
+        .kpi-card:nth-child(1) { border-left-color: #3b82f6; }
+        .kpi-card:nth-child(2) { border-left-color: #10b981; }
+        .kpi-card:nth-child(3) { border-left-color: #f59e0b; }
+        .kpi-card:nth-child(4) { border-left-color: #ef4444; }
+        .kpi-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .kpi-icon.blue { background: rgba(59, 130, 246, 0.12); }
+        .kpi-icon.green { background: rgba(16, 185, 129, 0.12); }
+        .kpi-icon.orange { background: rgba(245, 158, 11, 0.12); }
+        .kpi-icon.red { background: rgba(239, 68, 68, 0.12); }
+        .big-icon { width: 30px; height: 30px; }
+        .kpi-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .kpi-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-500);
+            font-weight: 700;
+        }
+        .kpi-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+        .kpi-trend {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+        .info-box {
+            margin: 0 32px 32px;
+            padding: 18px 22px;
+            border-radius: 20px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 4px 16px rgba(92, 59, 30, 0.05);
+            color: var(--gray-700);
+            font-size: 14px;
+        }
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+        .quick-action-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            color: var(--dark);
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(92, 59, 30, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .quick-action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(92, 59, 30, 0.1);
+        }
+        .quick-action-card .icon {
+            width: 36px;
+            height: 36px;
+        }
+        .quick-action-card span {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--dark);
+        }
+        .quick-actions-label {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0 32px 16px;
+        }
+    </style>
 </head>
 <body>
 <div class="dashboard-container">
@@ -48,14 +197,15 @@ $usuario = $_SESSION['usuario'];
 
         <header class="topbar">
             <div class="welcome-text">
-                <h1>Olá, <?php echo htmlspecialchars($usuario['nome']); ?></h1>
-                <p>Bem-vindo ao sistema de gestão da biblioteca.</p>
+                <h1>Olá, <?php echo htmlspecialchars($usuario['nome']); ?>! 👋</h1>
+                <p>Painel do Bibliotecário - Gerencie as operações da biblioteca</p>
             </div>
             <div class="topbar-actions">
                 <form method="POST" class="search-bar">
-                    <img src="../asset/icones/search.svg" class="icon" alt="">
-                    <input type="text" name="campoPesquisa" placeholder="Buscar livros...">
-                    <button name="pesquisar" type="submit" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;"></button>
+                    <input type="text" name="campoPesquisa" value="<?php echo htmlspecialchars($searchTerm); ?>" placeholder="Buscar livro, leitor, empréstimo...">
+                    <button name="pesquisar" type="submit" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;">
+                        <img src="../asset/icones/search.svg" class="icon" alt="Buscar">
+                    </button>
                 </form>
                 <button class="action-btn">
                     <img src="../asset/icones/bell.svg" class="icon" alt="">
@@ -64,16 +214,16 @@ $usuario = $_SESSION['usuario'];
             </div>
         </header>
 
-        <!-- KPIs -->
+        <!-- KPIs (Layout 2x2 para bibliotecário) -->
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-icon blue">
                     <img src="../asset/icones/book-copy.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Total de Livros</span>
+                    <span class="kpi-title">Livros em Catálogo</span>
                     <span class="kpi-value"><?php echo isset($put) && is_array($put) ? $put["count(id_livro)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+32 este mês</span>
+                    <span class="kpi-trend positive">Disponíveis para empréstimo</span>
                 </div>
             </div>
             <div class="kpi-card">
@@ -81,9 +231,9 @@ $usuario = $_SESSION['usuario'];
                     <img src="../asset/icones/users.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Leitores Ativos</span>
+                    <span class="kpi-title">Leitores Registrados</span>
                     <span class="kpi-value"><?php echo isset($putLeitores) && is_array($putLeitores) ? $putLeitores["count(id)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+18 este mês</span>
+                    <span class="kpi-trend positive">Usuários ativos no sistema</span>
                 </div>
             </div>
             <div class="kpi-card">
@@ -91,9 +241,9 @@ $usuario = $_SESSION['usuario'];
                     <img src="../asset/icones/arrow-right-left.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Empréstimos</span>
+                    <span class="kpi-title">Empréstimos Ativos</span>
                     <span class="kpi-value"><?php echo isset($putEmprestimo) && is_array($putEmprestimo) ? $putEmprestimo["count(id_emprestimo)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+12 este mês</span>
+                    <span class="kpi-trend positive">Em circulação no momento</span>
                 </div>
             </div>
             <div class="kpi-card">
@@ -101,58 +251,149 @@ $usuario = $_SESSION['usuario'];
                     <img src="../asset/icones/calendar.svg" class="icon big-icon" alt="">
                 </div>
                 <div class="kpi-details">
-                    <span class="kpi-title">Reservas</span>
+                    <span class="kpi-title">Reservas Pendentes</span>
                     <span class="kpi-value"><?php echo isset($putReserva) && is_array($putReserva) ? $putReserva["count(id_reserva)"] : 0; ?></span>
-                    <span class="kpi-trend positive">+2 este mês</span>
+                    <span class="kpi-trend positive">Aguardando disponibilidade</span>
                 </div>
             </div>
         </div>
 
         <!-- ALERTA ATRASADOS -->
         <?php if ($total_atrasados > 0): ?>
-            <div class="alert erro" style="margin-top:24px;">
+            <div class="alert erro" style="margin-top:0;">
                 ⚠️ <strong><?php echo $total_atrasados; ?> Empréstimo(s) Atrasado(s)</strong>
-                — <a href="emprestimos.php" style="color:var(--danger);">Ver detalhes</a>
+                — <a href="emprestimos.php" style="color:var(--danger);">Ver detalhes e enviar notificações</a>
             </div>
         <?php endif; ?>
 
+        <!-- AÇÕES RÁPIDAS DO BIBLIOTECÁRIO -->
+        <div style="padding: 32px; padding-top: 0;">
+            <h3 class="quick-actions-label">Operações Frequentes</h3>
+            <div class="quick-actions-grid">
+                <a href="registrar_emprestimo.php" class="quick-action-card">
+                    <img src="../asset/icones/arrow-right-left.svg" class="icon" alt="Registrar Empréstimo">
+                    <span>Registrar Empréstimo</span>
+                </a>
+                <a href="devolucao.php" class="quick-action-card">
+                    <img src="../asset/icones/rotate-ccw.svg" class="icon" alt="Registrar Devolução">
+                    <span>Registrar Devolução</span>
+                </a>
+                <a href="leitores.php" class="quick-action-card">
+                    <img src="../asset/icones/user-cog.svg" class="icon" alt="Verificar Leitor">
+                    <span>Verificar Leitor</span>
+                </a>
+                <a href="multas.php" class="quick-action-card">
+                    <img src="../asset/icones/alert-circle.svg" class="icon" alt="Gestão de Multas">
+                    <span>Gestão de Multas</span>
+                </a>
+                <a href="comprovativo.php" class="quick-action-card">
+                    <img src="../asset/icones/file-text.svg" class="icon" alt="Emitir Comprovativo">
+                    <span>Emitir Comprovativo</span>
+                </a>
+                <a href="livros.php" class="quick-action-card">
+                    <img src="../asset/icones/book-open.svg" class="icon" alt="Gerenciar Livros">
+                    <span>Gerenciar Livros</span>
+                </a>
+            </div>
+        </div>
+
         <!-- RESULTADOS DA PESQUISA -->
-        <?php if (!empty($pesquisaEncontrada) && is_array($pesquisaEncontrada)): ?>
+        <?php if (!empty($searchResults) || $searchMessage): ?>
             <div class="table-card" style="margin-top:28px;">
                 <div class="table-card-header">
                     <h2>Resultados da pesquisa</h2>
-                    <span><?php echo count($pesquisaEncontrada); ?> resultado(s)</span>
+                    <?php if (!empty($searchResults)): ?>
+                        <span><?php echo count($searchResults); ?> resultado(s)</span>
+                    <?php else: ?>
+                        <span>Nenhum resultado</span>
+                    <?php endif; ?>
                 </div>
-                <table style="width:100%;border-collapse:collapse;">
-                    <thead>
-                        <tr>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Livro</th>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Empréstimo</th>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Previsão</th>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($pesquisaEncontrada as $emp): ?>
-                            <?php
-                                if (!empty($emp['data_devolucao'])) {
-                                    $status = 'Devolvido'; $cls = 'devolvido';
-                                } elseif (strtotime($emp['data_prevista'] ?? 'now') < time()) {
-                                    $status = 'Atrasado'; $cls = 'atrasado';
-                                } else {
-                                    $status = !empty($emp['estado']) ? 'Ativo' : 'Pendente';
-                                    $cls = strtolower($status);
-                                }
-                            ?>
-                            <tr>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($emp['titulo_livro'] ?? '-'); ?></td>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo date('d/m/Y', strtotime($emp['data_emprestimo'] ?? 'now')); ?></td>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo date('d/m/Y', strtotime($emp['data_prevista'] ?? 'now')); ?></td>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><span class="status <?php echo $cls; ?>"><?php echo $status; ?></span></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+
+                <?php if (!empty($searchResults)): ?>
+                    <?php if ($pesquisaEncontrada['type'] === 'emprestimo'): ?>
+                        <table style="width:100%;border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Livro</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Leitor</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Data Empréstimo</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Previsão</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($searchResults as $item):
+                                    $rowUrl = buildSearchUrl($pesquisaEncontrada['type'], $item, $searchTerm);
+                                    if (!empty($item['data_prevista']) && strtotime($item['data_prevista']) < time()) {
+                                        $status = 'Atrasado';
+                                        $cls = 'atrasado';
+                                    } else {
+                                        $status = !empty($item['estado']) ? 'Ativo' : 'Pendente';
+                                        $cls = strtolower($status);
+                                    }
+                                ?>
+                                    <tr class="clickable-row" onclick="window.location.href='<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>'">
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><a class="result-link" href="<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>"><?php echo htmlspecialchars($item['titulo_livro'] ?? '-'); ?></a></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($item['leitor'] ?? '-'); ?></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo !empty($item['data_emprestimo']) ? date('d/m/Y', strtotime($item['data_emprestimo'])) : '-'; ?></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo !empty($item['data_prevista']) ? date('d/m/Y', strtotime($item['data_prevista'])) : '-'; ?></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><span class="status <?php echo $cls; ?>"><?php echo $status; ?></span></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php elseif ($pesquisaEncontrada['type'] === 'leitor'): ?>
+                        <table style="width:100%;border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Nome</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Email</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Telefone</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">NIF</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($searchResults as $item):
+                                    $rowUrl = buildSearchUrl($pesquisaEncontrada['type'], $item, $searchTerm);
+                                ?>
+                                    <tr class="clickable-row" onclick="window.location.href='<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>'">
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><a class="result-link" href="<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>"><?php echo htmlspecialchars($item['nome'] ?? '-'); ?></a></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($item['email'] ?? '-'); ?></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($item['numero_telefone'] ?? '-'); ?></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($item['nif'] ?? '-'); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php elseif ($pesquisaEncontrada['type'] === 'livro'): ?>
+                        <table style="width:100%;border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Título</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Autor</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Quantidade</th>
+                                    <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Editora</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($searchResults as $item):
+                                    $rowUrl = buildSearchUrl($pesquisaEncontrada['type'], $item, $searchTerm);
+                                ?>
+                                    <tr class="clickable-row" onclick="window.location.href='<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>'">
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><a class="result-link" href="<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>"><?php echo htmlspecialchars($item['titulo'] ?? '-'); ?></a></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($item['autor'] ?? '-'); ?></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($item['quantidade'] ?? '-'); ?></td>
+                                        <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($item['editora'] ?? '-'); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <div class="alert erro" style="margin:0;">
+                        <?php echo htmlspecialchars($searchMessage ?: 'Nenhum resultado encontrado.'); ?>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 
