@@ -16,20 +16,27 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
     <nav class="sidebar-nav">
         <?php
+        // Escolhe o arquivo do dashboard conforme o tipo de usuário (fallback para adm.php)
+        $dashboardFile = 'adm.php';
+        if (isset($usuario['tipo_usuario']) && $usuario['tipo_usuario'] === 'bibliotecario') {
+            $dashboardFile = 'bibliotec.php';
+        }
+
         $items = [
-            ['file' => 'adm.php', 'icon' => 'home.svg', 'label' => 'Dashboard'],
+            ['file' => $dashboardFile, 'icon' => 'home.svg', 'label' => 'Dashboard'],
             ['file' => 'categorias.php', 'icon' => 'file-text.svg', 'label' => 'Categorias'],
             ['file' => 'livros.php', 'icon' => 'book-open.svg', 'label' => 'Livros'],
             ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Leitores'],
             ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
-
+            ['file' => 'bibliotecarios.php', 'icon' => 'users.svg', 'label' => 'Bibliotecários'],
            
             ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
             ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
 
             ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
             ['file' => 'configuracoes.php', 'icon' => 'settings.svg', 'label' => 'Configurações'],
-            ['file' => 'logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
+            ['file' => '../logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
+            
 
         ];
 
