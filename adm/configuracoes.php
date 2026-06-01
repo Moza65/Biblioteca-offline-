@@ -1,24 +1,6 @@
 <?php
 require_once __DIR__ . '/common.php';
 $configPath = __DIR__ . '/../config/settings.json';
-<<<<<<< HEAD
-$errors  = [];
-$success = false;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents($configPath), true) ?: [];
-
-    $data['library_name']      = trim($_POST['library_name']      ?? $data['library_name']      ?? '');
-    $data['contact_email']     = trim($_POST['contact_email']     ?? $data['contact_email']     ?? '');
-    $data['opening_hours']     = trim($_POST['opening_hours']     ?? $data['opening_hours']     ?? '');
-    $data['default_loan_days'] = (int)($_POST['default_loan_days'] ?? $data['default_loan_days'] ?? 7);
-    $data['fine_per_day']      = floatval(str_replace(',', '.', ($_POST['fine_per_day'] ?? $data['fine_per_day'] ?? 0.0)));
-
-    if (empty($data['library_name']))
-        $errors[] = 'O nome da biblioteca é obrigatório.';
-    if (!filter_var($data['contact_email'], FILTER_VALIDATE_EMAIL))
-        $errors[] = 'Email de contato inválido.';
-=======
 $errors = [];
 $success = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($data['library_name'])) $errors[] = 'O nome da biblioteca é obrigatório.';
     if (!filter_var($data['contact_email'], FILTER_VALIDATE_EMAIL)) $errors[] = 'Email de contato inválido.';
->>>>>>> 19f5af7ac05a31e6793070d3ef8bceaf6dc13b3c
 
     if (empty($errors)) {
         file_put_contents($configPath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
