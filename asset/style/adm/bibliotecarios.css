@@ -1,0 +1,271 @@
+/* ============================================
+   BIBLIOTECÁRIOS — Estilo Moderno
+   Segue as variáveis do adm.css existente
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* Override font apenas nas páginas que importarem este CSS */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* ── TOPBAR ─────────────────────────────── */
+.topbar {
+    height: auto;
+    align-items: center;
+    padding: 0 0 28px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.welcome-text h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+}
+
+.welcome-text p {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-top: 2px;
+}
+
+/* ── BOTÃO NOVO ─────────────────────────── */
+.novo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: linear-gradient(135deg, var(--primary) 0%, #7B4B2A 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(92, 59, 30, 0.35);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    letter-spacing: 0.2px;
+}
+
+.novo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(92, 59, 30, 0.40);
+}
+
+.novo-btn:active {
+    transform: translateY(0);
+    opacity: 0.9;
+}
+
+/* ── CARD DA TABELA ─────────────────────── */
+.table-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(60, 30, 10, 0.06);
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--gray-200);
+    background: var(--gray-50);
+}
+
+.table-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -0.2px;
+}
+
+/* ── TABELA ─────────────────────────────── */
+.bibliotecario-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bibliotecario-table thead th {
+    padding: 14px 24px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--gray-500);
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.bibliotecario-table tbody tr {
+    border-bottom: 1px solid var(--gray-100);
+    transition: background 0.15s ease;
+}
+
+.bibliotecario-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.bibliotecario-table tbody tr:hover {
+    background: var(--primary-light);
+}
+
+.bibliotecario-table tbody td {
+    padding: 16px 24px;
+    font-size: 14px;
+    color: var(--gray-800);
+    vertical-align: middle;
+}
+
+/* ID pill */
+.bibliotecario-table tbody td:first-child {
+    font-weight: 700;
+    color: var(--gray-500);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Nome */
+.bibliotecario-table tbody td:nth-child(2) {
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+/* Email */
+.bibliotecario-table tbody td:nth-child(3) {
+    color: var(--gray-500);
+    font-size: 13.5px;
+}
+
+/* Contacto */
+.bibliotecario-table tbody td:nth-child(4) {
+    color: var(--gray-500);
+    font-size: 13.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── BOTÕES DE AÇÃO ─────────────────────── */
+.bibliotecario-table tbody td:last-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+.editar-btn,
+.excluir-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 16px;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    white-space: nowrap;
+}
+
+.editar-btn {
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid rgba(92, 59, 30, 0.15);
+}
+
+.editar-btn:hover {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(92, 59, 30, 0.28);
+    transform: translateY(-1px);
+}
+
+.excluir-btn {
+    background: var(--danger-light);
+    color: var(--danger);
+    border: 1px solid rgba(140, 74, 66, 0.15);
+}
+
+.excluir-btn:hover {
+    background: var(--danger);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(140, 74, 66, 0.28);
+    transform: translateY(-1px);
+}
+
+/* ── ESTADO VAZIO ───────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 64px 24px;
+    color: var(--gray-500);
+}
+
+.empty-state svg {
+    opacity: 0.3;
+    margin-bottom: 16px;
+}
+
+.empty-state p {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* ── ANIMAÇÃO DE ENTRADA DAS LINHAS ─────── */
+@keyframes rowFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bibliotecario-table tbody tr {
+    animation: rowFadeIn 0.3s ease both;
+}
+
+.bibliotecario-table tbody tr:nth-child(1)  { animation-delay: 0.04s; }
+.bibliotecario-table tbody tr:nth-child(2)  { animation-delay: 0.08s; }
+.bibliotecario-table tbody tr:nth-child(3)  { animation-delay: 0.12s; }
+.bibliotecario-table tbody tr:nth-child(4)  { animation-delay: 0.16s; }
+.bibliotecario-table tbody tr:nth-child(5)  { animation-delay: 0.20s; }
+.bibliotecario-table tbody tr:nth-child(6)  { animation-delay: 0.24s; }
+.bibliotecario-table tbody tr:nth-child(7)  { animation-delay: 0.28s; }
+.bibliotecario-table tbody tr:nth-child(8)  { animation-delay: 0.32s; }
+.bibliotecario-table tbody tr:nth-child(9)  { animation-delay: 0.36s; }
+.bibliotecario-table tbody tr:nth-child(10) { animation-delay: 0.40s; }
+
+/* ── SCROLLBAR HORIZONTAL SE NECESSÁRIO ─── */
+.table-card {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .novo-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .bibliotecario-table thead th,
+    .bibliotecario-table tbody td {
+        padding: 12px 16px;
+    }
+}
