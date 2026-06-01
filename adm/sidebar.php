@@ -34,7 +34,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
 
             ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
-            ['file' => 'configuracoes.php', 'icon' => 'settings.svg', 'label' => 'Configurações'],
             ['file' => '../logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
             
 
