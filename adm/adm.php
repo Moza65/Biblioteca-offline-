@@ -99,6 +99,11 @@ $total_atrasados = 0;
                     <img src="../asset/icones/bell.svg" class="icon" alt="">
                     <span class="badge">3</span>
                 </button>
+                <button class="action-btn">
+                    <a href="">
+                        <img src="../asset/icones/settings.svg" class="icon" alt="">
+                    </a>
+                </button>
             </div>
         </header>
 
