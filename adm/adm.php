@@ -22,9 +22,43 @@ $putReserva    = $callClass->QuantidadeReserva();
 
 require_once __DIR__ . '/common.php';
 
-$pesquisaEncontrada = [];
-if (isset($_POST['pesquisar']) && !empty($_POST['campoPesquisa'])) {
-    $pesquisaEncontrada = $callClass->ShowSerach($_POST['campoPesquisa']);
+$pesquisaEncontrada = ['type' => 'empty', 'items' => []];
+$searchResults = [];
+$searchMessage = '';
+$searchTerm = '';
+
+if (isset($_POST['pesquisar'])) {
+    $searchTerm = trim($_POST['campoPesquisa'] ?? '');
+    if ($searchTerm !== '') {
+        $pesquisaEncontrada = $callClass->ShowSerach($searchTerm);
+        if (!empty($pesquisaEncontrada['items'])) {
+            $searchResults = $pesquisaEncontrada['items'];
+        } else {
+            if (!empty($pesquisaEncontrada['message'])) {
+                $searchMessage = $pesquisaEncontrada['message'];
+            } elseif ($pesquisaEncontrada['type'] === 'empty') {
+                $searchMessage = 'Digite algum termo para pesquisar.';
+            } else {
+                $searchMessage = 'Nenhum resultado encontrado.';
+            }
+        }
+    } else {
+        $searchMessage = 'Digite algum termo para pesquisar.';
+    }
+}
+
+function buildSearchUrl($type, $item, $searchTerm) {
+    $term = urlencode($searchTerm);
+    if ($type === 'livro') {
+        return 'livros.php?busca=' . $term;
+    }
+    if ($type === 'leitor') {
+        return !empty($item['id']) ? 'leitores.php?id_leitor=' . (int)$item['id'] : 'leitores.php?busca=' . $term;
+    }
+    if ($type === 'emprestimo') {
+        return !empty($item['id_emprestimo']) ? 'emprestimos.php?id_emprestimo=' . (int)$item['id_emprestimo'] : 'emprestimos.php?busca=' . $term;
+    }
+    return 'adm.php';
 }
 
 $total_atrasados = 0;
@@ -37,6 +71,12 @@ $total_atrasados = 0;
     <title>Dashboard - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .clickable-row { cursor: pointer; }
+        .clickable-row:hover { background: rgba(59, 130, 246, 0.06); }
+        .result-link { color: inherit; text-decoration: none; }
+        .table-card .alert { margin: 0; }
+    </style>
 </head>
 <body>
 <div class="dashboard-container">
@@ -52,7 +92,7 @@ $total_atrasados = 0;
             <div class="topbar-actions">
                 <form method="POST" class="search-bar">
                     <img src="../asset/icones/search.svg" class="icon" alt="">
-                    <input type="text" name="campoPesquisa" placeholder="Buscar livros...">
+                    <input type="text" name="campoPesquisa" placeholder="Buscar livro, leitor, empréstimo..." value="<?php echo htmlspecialchars($searchTerm); ?>">
                     <button name="pesquisar" type="submit" style="background:none;border:none;cursor:pointer;display:flex;align-items:center;"></button>
                 </form>
                 <button class="action-btn">
@@ -115,24 +155,30 @@ $total_atrasados = 0;
         <?php endif; ?>
 
         <!-- RESULTADOS DA PESQUISA -->
-        <?php if (!empty($pesquisaEncontrada) && is_array($pesquisaEncontrada)): ?>
+        <?php if (!empty($searchResults) || $searchMessage): ?>
             <div class="table-card" style="margin-top:28px;">
                 <div class="table-card-header">
                     <h2>Resultados da pesquisa</h2>
-                    <span><?php echo count($pesquisaEncontrada); ?> resultado(s)</span>
+                    <?php if (!empty($searchResults)): ?>
+                        <span><?php echo count($searchResults); ?> resultado(s)</span>
+                    <?php else: ?>
+                        <span>Nenhum resultado</span>
+                    <?php endif; ?>
                 </div>
-                <table style="width:100%;border-collapse:collapse;">
-                    <thead>
-                        <tr>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Livro</th>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Empréstimo</th>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Previsão</th>
-                            <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($pesquisaEncontrada as $emp): ?>
-                            <?php
+
+                <?php if (!empty($searchResults)): ?>
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Livro</th>
+                                <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Empréstimo</th>
+                                <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Previsão</th>
+                                <th style="background:var(--gray-50);padding:12px 18px;text-align:left;font-size:12px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--gray-200);">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($searchResults as $emp):
+                                $rowUrl = buildSearchUrl($pesquisaEncontrada['type'], $emp, $searchTerm);
                                 if (!empty($emp['data_devolucao'])) {
                                     $status = 'Devolvido'; $cls = 'devolvido';
                                 } elseif (strtotime($emp['data_prevista'] ?? 'now') < time()) {
@@ -142,15 +188,22 @@ $total_atrasados = 0;
                                     $cls = strtolower($status);
                                 }
                             ?>
-                            <tr>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo htmlspecialchars($emp['titulo_livro'] ?? '-'); ?></td>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo date('d/m/Y', strtotime($emp['data_emprestimo'] ?? 'now')); ?></td>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo date('d/m/Y', strtotime($emp['data_prevista'] ?? 'now')); ?></td>
-                                <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><span class="status <?php echo $cls; ?>"><?php echo $status; ?></span></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                                <tr class="clickable-row" onclick="window.location.href='<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>'">
+                                    <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);">
+                                        <a class="result-link" href="<?php echo htmlspecialchars($rowUrl, ENT_QUOTES); ?>"><?php echo htmlspecialchars($emp['titulo_livro'] ?? '-'); ?></a>
+                                    </td>
+                                    <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo date('d/m/Y', strtotime($emp['data_emprestimo'] ?? 'now')); ?></td>
+                                    <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><?php echo date('d/m/Y', strtotime($emp['data_prevista'] ?? 'now')); ?></td>
+                                    <td style="padding:12px 18px;font-size:14px;border-bottom:1px solid var(--gray-200);"><span class="status <?php echo $cls; ?>"><?php echo $status; ?></span></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <div class="alert erro" style="margin:0;">
+                        <?php echo htmlspecialchars($searchMessage ?: 'Nenhum resultado encontrado.'); ?>
+                    </div>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 
