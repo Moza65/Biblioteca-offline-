@@ -3,32 +3,9 @@ require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../Buscas/buscarDados.php';
 require_once __DIR__ . '/common.php';
 
-
-// Processar cadastro via AJAX
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'cadastrar_leitor') {
-    header('Content-Type: application/json');
-    $nome  = trim($_POST['nome'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $nif   = trim($_POST['nif'] ?? '');
-    $tel   = trim($_POST['telefone'] ?? '');
-
-    if (!$nome || !$email) {
-        echo json_encode(['success' => false, 'message' => 'Nome e e-mail são obrigatórios.']);
-        exit;
-    }
-
-    try {
-        $stmt = $pdo->prepare("INSERT INTO leitor (nome, email, nif, numero_telefone, data_leitor) VALUES (?, ?, ?, ?, NOW())");
-        $stmt->execute([$nome, $email, $nif ?: null, $tel ?: null]);
-        echo json_encode(['success' => true, 'message' => 'Leitor cadastrado com sucesso!']);
-    } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Erro ao cadastrar: ' . $e->getMessage()]);
-    }
-    exit;
-}
-
 $callClass = new BuscarDados();
 $searchTerm = trim($_GET['busca'] ?? '');
+
 try {
     if ($searchTerm !== '') {
         $leitores = $callClass->GetReady($searchTerm);

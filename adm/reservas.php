@@ -51,7 +51,7 @@ $totalReservas = count($reservas);
             <table class="reservas-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th hidden>ID</th>
                         <th>Leitor</th>
                         <th>Livro</th>
                         <th>Data da Reserva</th>
@@ -67,7 +67,7 @@ $totalReservas = count($reservas);
                             $cssClass = $vencida ? 'vencida' : 'ativa';
                         ?>
                             <tr>
-                                <td>#<?php echo htmlspecialchars($res['id_reserva'] ?? '-'); ?></td>
+                                <td hidden><?php echo htmlspecialchars($res['id_reserva'] ?? '-'); ?></td>
                                 <td><?php echo htmlspecialchars($res['nome_leitor'] ?? '-'); ?></td>
                                 <td><?php echo htmlspecialchars($res['titulo_livro'] ?? '-'); ?></td>
                                 <td><?php echo isset($res['data_reserva']) ? date('d/m/Y', strtotime($res['data_reserva'])) : '—'; ?></td>

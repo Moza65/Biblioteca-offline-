@@ -3,9 +3,16 @@ require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../Buscas/buscarDados.php';
 require_once __DIR__ . '/common.php';
 
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../logout.php");
+    exit();
+}
+
+
 $callClass = new BuscarDados();
 $searchTerm = trim($_GET['busca'] ?? '');
 $emprestimoId = isset($_GET['id_emprestimo']) ? (int)$_GET['id_emprestimo'] : 0;
+
 
 try {
     if ($emprestimoId > 0) {

@@ -42,7 +42,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
     ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
 
-    ['file' => 'logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
+    ['file' => '../logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
 
 ];
 
@@ -63,7 +63,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
             <div class="user-info">
                 <span class="user-name"><?php echo isset($usuario['email']) ? htmlspecialchars($usuario['email']) : 'Administrador'; ?></span>
-                <span class="user-email">Administrador</span>
+                <span class="user-email">Bibliotecário</span>
             </div>
         </div>
     </div>
