@@ -29,14 +29,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Leitores'],
             ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
             ['file' => 'bibliotecarios.php', 'icon' => 'users.svg', 'label' => 'Bibliotecários'],
-           
             ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
             ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
-
             ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
             ['file' => '../logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
-            
-
         ];
 
         foreach ($items as $it) {

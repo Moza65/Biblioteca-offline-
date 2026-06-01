@@ -72,7 +72,8 @@ $usuario = $_SESSION['usuario'];
   
     <title>Painel do Bibliotecário - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
-    <link rel="stylesheet" href="../asset/style/adm/biblio.css">
+    <link rel="stylesheet" href="../asset/style/adm/bibliotecarios.css">
+    <link rel="stylesheet" href="../asset/style/biblio.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <body>
 <div class="dashboard-container">
@@ -82,7 +83,7 @@ $usuario = $_SESSION['usuario'];
 
         <header class="topbar">
             <div class="welcome-text">
-                <h1>Olá, <?php echo htmlspecialchars($usuario['nome']); ?>! 👋</h1>
+                <h1>Olá, <?php echo htmlspecialchars($usuario['nome']); ?></h1>
                 <p>Painel do Bibliotecário - Gerencie as operações da biblioteca</p>
             </div>
             <div class="topbar-actions">
@@ -150,38 +151,6 @@ $usuario = $_SESSION['usuario'];
                 — <a href="emprestimos.php" style="color:var(--danger);">Ver detalhes e enviar notificações</a>
             </div>
         <?php endif; ?>
-
-        <!-- AÇÕES RÁPIDAS DO BIBLIOTECÁRIO -->
-        <div style="padding: 32px; padding-top: 0;">
-            <h3 class="quick-actions-label">Operações Frequentes</h3>
-            <div class="quick-actions-grid">
-                <a href="registrar_emprestimo.php" class="quick-action-card">
-                    <img src="../asset/icones/arrow-right-left.svg" class="icon" alt="Registrar Empréstimo">
-                    <span>Registrar Empréstimo</span>
-                </a>
-                <a href="devolucao.php" class="quick-action-card">
-                    <img src="../asset/icones/rotate-ccw.svg" class="icon" alt="Registrar Devolução">
-                    <span>Registrar Devolução</span>
-                </a>
-                <a href="leitores.php" class="quick-action-card">
-                    <img src="../asset/icones/user-cog.svg" class="icon" alt="Verificar Leitor">
-                    <span>Verificar Leitor</span>
-                </a>
-                <a href="multas.php" class="quick-action-card">
-                    <img src="../asset/icones/alert-circle.svg" class="icon" alt="Gestão de Multas">
-                    <span>Gestão de Multas</span>
-                </a>
-                <a href="comprovativo.php" class="quick-action-card">
-                    <img src="../asset/icones/file-text.svg" class="icon" alt="Emitir Comprovativo">
-                    <span>Emitir Comprovativo</span>
-                </a>
-                <a href="livros.php" class="quick-action-card">
-                    <img src="../asset/icones/book-open.svg" class="icon" alt="Gerenciar Livros">
-                    <span>Gerenciar Livros</span>
-                </a>
-            </div>
-        </div>
-
         <!-- RESULTADOS DA PESQUISA -->
         <?php if (!empty($searchResults) || $searchMessage): ?>
             <div class="table-card" style="margin-top:28px;">
