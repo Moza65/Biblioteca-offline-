@@ -3,7 +3,7 @@ require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../Buscas/buscarDados.php';
 require_once __DIR__ . '/common.php';
 
-<<<<<<< HEAD
+
 // Processar cadastro via AJAX
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'cadastrar_leitor') {
     header('Content-Type: application/json');
@@ -26,11 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
     exit;
 }
-=======
+
 $callClass = new BuscarDados();
 $searchTerm = trim($_GET['busca'] ?? '');
->>>>>>> e7dd0c949ecae7bceec7b93e2529516ffcbbc75d
-
 try {
     if ($searchTerm !== '') {
         $leitores = $callClass->GetReady($searchTerm);
@@ -174,8 +172,8 @@ if (isset($_GET['id_leitor'])) {
                         <?php endif; ?>
                     </tbody>
                 </table>
-<<<<<<< HEAD
-=======
+
+
 
             <?php if ($leitorSelecionado): ?>
                 <div class="section-card" style="margin: 32px;">
@@ -251,7 +249,6 @@ if (isset($_GET['id_leitor'])) {
                 </div>
             <?php endif; ?>
 
->>>>>>> e7dd0c949ecae7bceec7b93e2529516ffcbbc75d
             </main>
         </div>
 
