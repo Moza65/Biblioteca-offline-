@@ -34,7 +34,8 @@
                 <p>Acesse o sistema de gestão da biblioteca</p>
             </div>
  <!-- Formulário de login -->
-            <form id="loginForm" action="validar_login.php" method="POST">
+            <?php $loginAction = dirname($_SERVER['SCRIPT_NAME']) . '/validar_login.php'; ?>
+            <form id="loginForm" action="<?php echo htmlspecialchars($loginAction, ENT_QUOTES, 'UTF-8'); ?>" method="POST">
  <!-- Campo de email -->
     <div class="form-group">
         <label for="email">E-mail</label>
