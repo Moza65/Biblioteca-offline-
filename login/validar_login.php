@@ -23,7 +23,7 @@ $usuario = $stmt->fetch();
 
 // Verifica se encontrou
 if ($usuario) {
-
+    
     // Guarda dados na sessão
     $_SESSION['usuario'] = $usuario;
 

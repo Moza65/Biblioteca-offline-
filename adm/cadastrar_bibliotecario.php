@@ -37,13 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mensagem   = 'Este e-mail já está registado no sistema.';
                 $tipoAlerta = 'erro';
             } else {
-                $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
                 $ins = $pdo->prepare("
                     INSERT INTO usuario (nome, email, senha, contacto, tipo_usuario, data_usuario)
                     VALUES (?, ?, ?, ?, 'bibliotecario', ?)
                 ");
-                $ins->execute([$nome, $email, $senha_hash, $contacto, $data_usuario]);
+                $ins->execute([$nome, $email, $senha, $contacto, $data_usuario]);
 
                 $mensagem   = "Bibliotecário \"$nome\" cadastrado com sucesso!";
                 $tipoAlerta = 'sucesso';
