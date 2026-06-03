@@ -96,7 +96,6 @@ if (isset($_GET['id_leitor'])) {
                         <p>Visualize todos os leitores cadastrados</p>
                     </div>
 
-                    <!-- Botão Novo Leitor -->
                     <div class="topbar-actions">
                         <button class="btn-primary" onclick="abrirModal()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none"
@@ -150,81 +149,79 @@ if (isset($_GET['id_leitor'])) {
                     </tbody>
                 </table>
 
-
-
-            <?php if ($leitorSelecionado): ?>
-                <div class="section-card" style="margin: 32px;">
-                    <div class="section-card-header">
-                        <h2>Verificação de Leitor</h2>
-                        <span>Detalhes e pendências</span>
-                    </div>
-                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($leitorSelecionado['nome']); ?> | <strong>Email:</strong> <?php echo htmlspecialchars($leitorSelecionado['email']); ?></p>
-                    <p><strong>Empréstimos ativos:</strong> <?php echo $emprestimosAtivos; ?> | <strong>Pendências:</strong> <?php echo count($pendencias); ?> | <strong>Atrasados:</strong> <?php echo count($atrasados); ?></p>
-
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:20px;">
-                        <div style="background:var(--gray-50);padding:18px;border-radius:10px;">
-                            <strong>Verificar leitor</strong>
-                            <p style="margin-top:10px;">Consulte os detalhes do leitor e seus empréstimos no sistema.</p>
+                <?php if ($leitorSelecionado): ?>
+                    <div class="section-card" style="margin: 32px;">
+                        <div class="section-card-header">
+                            <h2>Verificação de Leitor</h2>
+                            <span>Detalhes e pendências</span>
                         </div>
-                        <div style="background:var(--gray-50);padding:18px;border-radius:10px;">
-                            <strong>Verificar pendências</strong>
-                            <p style="margin-top:10px;">Este leitor possui <?php echo count($pendencias); ?> pendência<?php echo count($pendencias) !== 1 ? 's' : ''; ?>.</p>
-                        </div>
-                    </div>
+                        <p><strong>Nome:</strong> <?php echo htmlspecialchars($leitorSelecionado['nome']); ?> | <strong>Email:</strong> <?php echo htmlspecialchars($leitorSelecionado['email']); ?></p>
+                        <p><strong>Empréstimos ativos:</strong> <?php echo $emprestimosAtivos; ?> | <strong>Pendências:</strong> <?php echo count($pendencias); ?> | <strong>Atrasados:</strong> <?php echo count($atrasados); ?></p>
 
-                    <?php if (count($pendencias) > 0): ?>
-                        <div style="margin-top:24px;">
-                            <h3 style="margin-bottom:12px;">Pendências em aberto</h3>
-                            <table class="leitores-table">
-                                <thead>
-                                    <tr>
-                                        <th>Livro</th>
-                                        <th>Data Empréstimo</th>
-                                        <th>Previsão</th>
-                                        <th>Dias em atraso</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($pendencias as $pend): ?>
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:20px;">
+                            <div style="background:var(--gray-50);padding:18px;border-radius:10px;">
+                                <strong>Verificar leitor</strong>
+                                <p style="margin-top:10px;">Consulte os detalhes do leitor e seus empréstimos no sistema.</p>
+                            </div>
+                            <div style="background:var(--gray-50);padding:18px;border-radius:10px;">
+                                <strong>Verificar pendências</strong>
+                                <p style="margin-top:10px;">Este leitor possui <?php echo count($pendencias); ?> pendência<?php echo count($pendencias) !== 1 ? 's' : ''; ?>.</p>
+                            </div>
+                        </div>
+
+                        <?php if (count($pendencias) > 0): ?>
+                            <div style="margin-top:24px;">
+                                <h3 style="margin-bottom:12px;">Pendências em aberto</h3>
+                                <table class="leitores-table">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($pend['titulo']); ?></td>
-                                            <td><?php echo date('d/m/Y', strtotime($pend['data_emprestimo'])); ?></td>
-                                            <td><?php echo date('d/m/Y', strtotime($pend['data_prevista'])); ?></td>
-                                            <td><?php echo max(0, (int)$pend['dias_atraso']); ?></td>
+                                            <th>Livro</th>
+                                            <th>Data Empréstimo</th>
+                                            <th>Previsão</th>
+                                            <th>Dias em atraso</th>
                                         </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php endif; ?>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($pendencias as $pend): ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($pend['titulo']); ?></td>
+                                                <td><?php echo date('d/m/Y', strtotime($pend['data_emprestimo'])); ?></td>
+                                                <td><?php echo date('d/m/Y', strtotime($pend['data_prevista'])); ?></td>
+                                                <td><?php echo max(0, (int)$pend['dias_atraso']); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if (count($atrasados) > 0): ?>
-                        <div style="margin-top:24px;">
-                            <h3 style="margin-bottom:12px;">Atrasos</h3>
-                            <table class="leitores-table">
-                                <thead>
-                                    <tr>
-                                        <th>Livro</th>
-                                        <th>Previsão</th>
-                                        <th>Dias de atraso</th>
-                                        <th>Multa estimada</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($atrasados as $atraso): ?>
+                        <?php if (count($atrasados) > 0): ?>
+                            <div style="margin-top:24px;">
+                                <h3 style="margin-bottom:12px;">Atrasos</h3>
+                                <table class="leitores-table">
+                                    <thead>
                                         <tr>
-                                            <td><?php echo htmlspecialchars($atraso['titulo']); ?></td>
-                                            <td><?php echo date('d/m/Y', strtotime($atraso['data_prevista'])); ?></td>
-                                            <td><?php echo max(0, (int)$atraso['dias_atraso']); ?></td>
-                                            <td>€<?php echo number_format(max(0, (int)$atraso['dias_atraso']) * 0.50, 2); ?></td>
+                                            <th>Livro</th>
+                                            <th>Previsão</th>
+                                            <th>Dias de atraso</th>
+                                            <th>Multa estimada</th>
                                         </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            <?php endif; ?>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($atrasados as $atraso): ?>
+                                            <tr>
+                                                <td><?php echo htmlspecialchars($atraso['titulo']); ?></td>
+                                                <td><?php echo date('d/m/Y', strtotime($atraso['data_prevista'])); ?></td>
+                                                <td><?php echo max(0, (int)$atraso['dias_atraso']); ?></td>
+                                                <td>Kz <?php echo number_format(max(0, (int)$atraso['dias_atraso']) * 0.50, 2); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
 
             </main>
         </div>
@@ -298,6 +295,8 @@ if (isset($_GET['id_leitor'])) {
 
         <!-- Toast de feedback -->
         <div class="toast" id="toast"></div>
+
+        <!-- Scripts -->
         <script src="../asset/js/modal_leitor.js"></script>
     </body>
 </html>
