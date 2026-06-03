@@ -213,11 +213,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 <div class="dashboard-container">
     <?php include 'sidebar.php'; ?>
 
-    <main class="main-content">
+    <main class="main-content"> 
         <header class="topbar">
             <div class="welcome-text">
                 <div class="page-title-row">
-                    <img src="../asset/icones/arrow-right-left.svg" alt="" class="page-title-icon">
+                    <img src="../asset/icones/layout-dashboard.svg" alt="" class="page-title-icon">
                     <h1>Registrar Empréstimo</h1>
                 </div>
                 <p>Registre um novo empréstimo de livro para um leitor</p>
