@@ -25,23 +25,13 @@ $currentPage = basename($_SERVER['PHP_SELF']);
        $items = [
 
     ['file' => $dashboardFile, 'icon' => 'home.svg', 'label' => 'Dashboard'],
-
     ['file' => 'categorias.php', 'icon' => 'file-text.svg', 'label' => 'Categorias'],
-
     ['file' => 'livros.php', 'icon' => 'book-open.svg', 'label' => 'Livros'],
-
     ['file' => 'leitores.php', 'icon' => 'users.svg', 'label' => 'Leitores'],
-
-    ['file' => 'registrar_emprestimo.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Registrar Empréstimo'],
-
-    ['file' => 'emprestimos.php', 'icon' => 'list.svg', 'label' => 'Empréstimos'],
-
+    ['file' => 'emprestimos.php', 'icon' => 'arrow-right-left.svg', 'label' => 'Empréstimos'],
     ['file' => 'devolucao.php', 'icon' => 'rotate-ccw.svg', 'label' => 'Devolução'],
-
     ['file' => 'reservas.php', 'icon' => 'calendar.svg', 'label' => 'Reservas'],
-
     ['file' => 'relatorios.php', 'icon' => 'relatorios.svg', 'label' => 'Relatórios'],
-
     ['file' => '../logout.php', 'icon' => 'logout.svg', 'label' => 'Sair'],
 
 ];

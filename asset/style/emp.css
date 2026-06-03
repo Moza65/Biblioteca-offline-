@@ -1,0 +1,30 @@
+        .btn-novo-emprestimo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, #7B4B2A 100%);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.22s ease;
+            box-shadow: 0 2px 8px rgba(92,59,30,0.22);
+            white-space: nowrap;
+        }
+
+        .btn-novo-emprestimo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(92,59,30,0.32);
+        }
+
+        .btn-novo-emprestimo:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(92,59,30,0.18);
+        }
+
+        .btn-novo-emprestimo svg {
+            flex-shrink: 0;
+        }

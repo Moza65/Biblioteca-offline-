@@ -45,6 +45,7 @@ $total = count($emprestimos);
     <title>Empréstimos - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
     <link rel="stylesheet" href="../asset/style/adm/emprestimos.css">
+    <link rel="stylesheet" href="../asset/style/emp.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -63,8 +64,16 @@ $total = count($emprestimos);
 
         <div class="table-card">
             <div class="table-card-header">
-                <h2>Lista de Empréstimos</h2>
-                <span><?php echo $total; ?> registo<?php echo $total !== 1 ? 's' : ''; ?></span>
+                <div>
+                    <h2>Lista de Empréstimos</h2>
+                    <span><?php echo $total; ?> registo<?php echo $total !== 1 ? 's' : ''; ?></span>
+                </div>
+                <a href="registrar_emprestimo.php" class="btn-novo-emprestimo">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Novo Empréstimo
+                </a>
             </div>
 
             <table class="emprestimos-table">

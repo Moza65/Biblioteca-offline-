@@ -9,9 +9,8 @@ $gerenciadorLeitores = new GerenciadorLeitores();
 $mensagem = '';
 $tipoAlerta = '';
 $ultimoEmprestimoId = null;
-$limiteEmprestimoPorLeitor = 5; // Limite máximo de empréstimos simultâneos
+$limiteEmprestimoPorLeitor = 5;
 
-// Buscar livros disponíveis
 $livrosDisponiveis = [];
 $livrosQuantidade = [];
 try {
@@ -25,7 +24,6 @@ try {
     $livrosDisponiveis = [];
 }
 
-// Buscar leitores
 $leitores = [];
 $emprestimosAtivosPorLeitor = [];
 try {
@@ -44,14 +42,12 @@ try {
     $emprestimosAtivosPorLeitor = [];
 }
 
-// Processar formulário de registrar empréstimo
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'registrar') {
     try {
         $id_leitor = (int)$_POST['id_leitor'];
         $id_livro = (int)$_POST['id_livro'];
         $dias_duracao = (int)($_POST['dias_duracao'] ?? 14);
 
-        // Validar limite de empréstimos
         $sqlVerificaLimite = $pdo->prepare("
             SELECT COUNT(*) FROM emprestimo e
             LEFT JOIN devolucao d ON e.id_emprestimo = d.id_emprestimo
@@ -64,20 +60,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             throw new Exception("Leitor atingiu o limite de $limiteEmprestimoPorLeitor empréstimos simultâneos.");
         }
 
-        // Registrar empréstimo
         $data_emprestimo = date('Y-m-d');
         $data_prevista = date('Y-m-d', strtotime("+$dias_duracao days"));
-        
+
         $sqlInsert = $pdo->prepare("
             INSERT INTO emprestimo (fk_Usuario_id_usuario, fk_Livro_id_livro, id_emprestimo_leitor, estado, data_prevista, data_emprestimo)
             VALUES (?, ?, ?, 1, ?, ?)
         ");
-        
+
         $usuario_id = $_SESSION['usuario']['id_usuario'] ?? 1;
         $sqlInsert->execute([$usuario_id, $id_livro, $id_leitor, $data_prevista, $data_emprestimo]);
         $ultimoEmprestimoId = $pdo->lastInsertId();
-        
-        // Reduzir quantidade de livros
+
         $sqlUpdateLivro = $pdo->prepare("UPDATE livro SET quantidade = quantidade - 1 WHERE id_livro = ?");
         $sqlUpdateLivro->execute([$id_livro]);
 
@@ -89,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -97,242 +90,241 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Empréstimo - Biblioteca Pandora</title>
     <link rel="stylesheet" href="../asset/style/adm/adm.css">
-    <link rel="stylesheet" href="../asset/style/adm/emprestimos.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .form-card {
-            background: var(--white);
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            margin: 32px;
-            max-width: 600px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--gray-700);
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 10px 12px;
-            border: 1px solid var(--gray-300);
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--gray-200);
-            color: var(--gray-700);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gray-300);
-        }
-
-        .alert {
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin: 32px;
-            margin-bottom: 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-        }
-
-        .alert.sucesso {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid var(--secondary);
-            color: #059669;
-        }
-
-        .alert.erro {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid var(--danger);
-            color: #b91c1c;
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(79, 172, 254, 0.1));
-            border-left: 4px solid var(--primary);
-            padding: 16px;
-            margin: 32px;
-            border-radius: 6px;
-            font-size: 14px;
-            color: var(--gray-700);
-        }
-    </style>
+    <link rel="stylesheet" href="../asset/style/rg_empest.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="dashboard-container">
     <?php include 'sidebar.php'; ?>
 
-    <main class="main-content"> 
-        <header class="topbar">
-            <div class="welcome-text">
-                <div class="page-title-row">
-                    <img src="../asset/icones/layout-dashboard.svg" alt="" class="page-title-icon">
-                    <h1>Registrar Empréstimo</h1>
+    <main class="main-content">
+        <div class="page-wrapper">
+
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="welcome-text">
+                    <div class="page-title-row">
+                        <img src="../asset/icones/file-text.svg" alt="" class="page-title-icon">
+                        <h1>Registar Empréstimo</h1>
+                    </div>
+                    <p>Associe um livro a um leitor e defina o prazo de devolução</p>
                 </div>
-                <p>Registre um novo empréstimo de livro para um leitor</p>
-            </div>
-        </header>
+                <a href="emprestimos.php" class="back-btn">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+                    Voltar
+                </a>
+            </header>
 
-        <?php if ($mensagem): ?>
-            <div class="alert <?php echo $tipoAlerta; ?>">
-                <?php echo htmlspecialchars($mensagem); ?>
-            </div>
-        <?php endif; ?>
-
-        <div class="info-box">
-            💡 Limite máximo de empréstimos simultâneos por leitor: <strong><?php echo $limiteEmprestimoPorLeitor; ?></strong> | Duração padrão: <strong>14 dias</strong>
-        </div>
-
-        <div class="form-card">
-            <form method="POST">
-                <input type="hidden" name="action" value="registrar">
-
-                <div class="form-group">
-                    <label for="id_leitor">Selecione o Leitor *</label>
-                    <select id="id_leitor" name="id_leitor" required>
-                        <option value="">-- Escolha um leitor --</option>
-                        <?php foreach ($leitores as $leitor): ?>
-                            <option value="<?php echo (int)$leitor['id']; ?>">
-                                <?php echo htmlspecialchars($leitor['nome']); ?> (<?php echo htmlspecialchars($leitor['email']); ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="id_livro">Selecione o Livro *</label>
-                    <select id="id_livro" name="id_livro" required>
-                        <option value="">-- Escolha um livro --</option>
-                        <?php foreach ($livrosDisponiveis as $livro): ?>
-                            <option value="<?php echo (int)$livro['id_livro']; ?>" data-quantidade="<?php echo (int)$livro['quantidade']; ?>">
-                                <?php echo htmlspecialchars($livro['titulo']); ?> - <?php echo htmlspecialchars($livro['autor']); ?> (<?php echo (int)$livro['quantidade']; ?> disp.)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Disponibilidade</label>
-                    <div id="livro-disponibilidade" style="font-size:14px;color:var(--gray-700);">Selecione um livro para ver disponibilidade.</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="dias_duracao">Duração em Dias</label>
-                    <input type="number" id="dias_duracao" name="dias_duracao" value="14" min="1" max="30">
-                </div>
-
-                <div class="form-group">
-                    <label>Limite de empréstimos</label>
-                    <div id="limite-emprestimos" style="font-size:14px;color:var(--gray-700);">Selecione um leitor para ver o limite.</div>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">✓ Registrar Empréstimo</button>
-                    <a href="emprestimos.php" class="btn btn-secondary" style="text-decoration: none;">← Voltar</a>
-                </div>
-            </form>
-
-            <?php if (!empty($ultimoEmprestimoId)): ?>
-                <div class="form-group" style="margin-top:20px;">
-                    <label>Emitir comprovativo</label>
-                    <a href="comprovativo.php?id_emprestimo=<?php echo $ultimoEmprestimoId; ?>" class="btn btn-primary" style="display:inline-block;">Gerar comprovativo</a>
+            <!-- Alert -->
+            <?php if ($mensagem): ?>
+                <div class="alert-banner <?php echo $tipoAlerta; ?>">
+                    <span class="alert-icon"><?php echo $tipoAlerta === 'sucesso' ? '✓' : '✕'; ?></span>
+                    <?php echo htmlspecialchars($mensagem); ?>
                 </div>
             <?php endif; ?>
-        </div>
+
+            <!-- Info strip -->
+            <div class="info-strip">
+                <div class="info-chip">
+                    <span class="chip-label">Limite por leitor</span>
+                    <span class="chip-value"><?php echo $limiteEmprestimoPorLeitor; ?> empréstimos</span>
+                </div>
+                <div class="info-chip">
+                    <span class="chip-label">Duração padrão</span>
+                    <span class="chip-value">14 dias</span>
+                </div>
+                <div class="info-chip">
+                    <span class="chip-label">Máximo permitido</span>
+                    <span class="chip-value">30 dias</span>
+                </div>
+            </div>
+
+            <!-- Form card -->
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div>
+                        <div class="form-step-badge">①</div>
+                    </div>
+                    <div>
+                        <h2>Dados do Empréstimo</h2>
+                        <p>Preencha todos os campos obrigatórios para concluir o registo</p>
+                    </div>
+                </div>
+
+                <form method="POST">
+                    <input type="hidden" name="action" value="registrar">
+
+                    <div class="form-body">
+
+                        <!-- Reader & Book row -->
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label>Leitor <span class="required">*</span></label>
+                                <div class="select-wrapper">
+                                    <select id="id_leitor" name="id_leitor" required>
+                                        <option value="">Escolha um leitor…</option>
+                                        <?php foreach ($leitores as $leitor): ?>
+                                            <option value="<?php echo (int)$leitor['id']; ?>">
+                                                <?php echo htmlspecialchars($leitor['nome']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <!-- Loan meter -->
+                                <div class="loan-meter" id="loan-meter">
+                                    <div class="loan-meter-track">
+                                        <div class="loan-meter-fill" id="loan-fill"></div>
+                                    </div>
+                                    <div class="loan-meter-label">
+                                        <span id="loan-label-left">— empréstimos ativos</span>
+                                        <strong id="loan-label-right">— / <?php echo $limiteEmprestimoPorLeitor; ?></strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-field">
+                                <label>Livro <span class="required">*</span></label>
+                                <div class="select-wrapper">
+                                    <select id="id_livro" name="id_livro" required>
+                                        <option value="">Escolha um livro…</option>
+                                        <?php foreach ($livrosDisponiveis as $livro): ?>
+                                            <option value="<?php echo (int)$livro['id_livro']; ?>" data-quantidade="<?php echo (int)$livro['quantidade']; ?>">
+                                                <?php echo htmlspecialchars($livro['titulo']); ?> — <?php echo htmlspecialchars($livro['autor']); ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <span class="status-pill" id="book-status">
+                                    <span class="status-dot"></span>
+                                    <span id="book-status-text"></span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-divider"></div>
+
+                        <!-- Duration -->
+                        <div class="form-field">
+                            <label>Duração do Empréstimo</label>
+                            <div class="duration-row">
+                                <input type="number" id="dias_duracao" name="dias_duracao" value="14" min="1" max="30">
+                                <div class="duration-tags">
+                                    <span class="duration-tag" data-days="7">7 dias</span>
+                                    <span class="duration-tag active" data-days="14">14 dias</span>
+                                    <span class="duration-tag" data-days="21">21 dias</span>
+                                    <span class="duration-tag" data-days="30">30 dias</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /form-body -->
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-register">
+                            <span class="btn-check">✓</span>
+                            Registar Empréstimo
+                        </button>
+                    </div>
+                </form>
+
+                <?php if (!empty($ultimoEmprestimoId)): ?>
+                    <div style="padding: 0 28px 28px;">
+                        <div class="receipt-card">
+                            <div class="receipt-info">
+                                <div class="receipt-icon-wrap">📄</div>
+                                <div class="receipt-text">
+                                    <h3>Comprovativo disponível</h3>
+                                    <p>Empréstimo #<?php echo $ultimoEmprestimoId; ?> registado com sucesso</p>
+                                </div>
+                            </div>
+                            <a href="comprovativo.php?id_emprestimo=<?php echo $ultimoEmprestimoId; ?>" class="btn-receipt">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                Gerar comprovativo
+                            </a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+            </div><!-- /form-card -->
+
+        </div><!-- /page-wrapper -->
     </main>
 </div>
 
 <script>
     const readerLoanCounts = <?php echo json_encode($emprestimosAtivosPorLeitor); ?>;
-    const bookQuantities = <?php echo json_encode($livrosQuantidade); ?>;
-    const limitPerReader = <?php echo $limiteEmprestimoPorLeitor; ?>;
+    const bookQuantities   = <?php echo json_encode($livrosQuantidade); ?>;
+    const limitPerReader   = <?php echo $limiteEmprestimoPorLeitor; ?>;
 
-    function atualizarInfo() {
-        const leitorSelect = document.getElementById('id_leitor');
-        const livroSelect = document.getElementById('id_livro');
-        const leitorInfo = document.getElementById('limite-emprestimos');
-        const livroInfo = document.getElementById('livro-disponibilidade');
+    /* ── Reader select → loan meter ──────────────── */
+    document.getElementById('id_leitor').addEventListener('change', function () {
+        const id      = parseInt(this.value, 10);
+        const meter   = document.getElementById('loan-meter');
+        const fill    = document.getElementById('loan-fill');
+        const lblLeft = document.getElementById('loan-label-left');
+        const lblRight= document.getElementById('loan-label-right');
 
-        const leitorId = parseInt(leitorSelect.value, 10);
-        const livroId = parseInt(livroSelect.value, 10);
-
-        if (leitorId && readerLoanCounts[leitorId] !== undefined) {
-            const ativo = readerLoanCounts[leitorId];
-            leitorInfo.textContent = `${ativo} empréstimo(s) ativo(s) / ${limitPerReader} limite`; 
-            leitorInfo.style.color = ativo >= limitPerReader ? 'var(--danger)' : 'var(--gray-700)';
-        } else if (leitorId) {
-            leitorInfo.textContent = `0 empréstimos ativos / ${limitPerReader} limite`;
-            leitorInfo.style.color = 'var(--gray-700)';
-        } else {
-            leitorInfo.textContent = 'Selecione um leitor para ver o limite.';
-            leitorInfo.style.color = 'var(--gray-700)';
+        if (!id) {
+            meter.classList.remove('visible');
+            return;
         }
 
-        if (livroId && bookQuantities[livroId] !== undefined) {
-            const quantidade = bookQuantities[livroId];
-            livroInfo.textContent = `${quantidade} unidade(s) disponível(is)`;
-            livroInfo.style.color = quantidade > 0 ? 'var(--secondary)' : 'var(--danger)';
-        } else {
-            livroInfo.textContent = 'Selecione um livro para ver disponibilidade.';
-            livroInfo.style.color = 'var(--gray-700)';
+        const active = readerLoanCounts[id] ?? 0;
+        const pct    = Math.min((active / limitPerReader) * 100, 100);
+
+        meter.classList.add('visible');
+        fill.style.width = pct + '%';
+
+        fill.classList.remove('half', 'full');
+        if (active >= limitPerReader)      fill.classList.add('full');
+        else if (active >= limitPerReader * 0.6) fill.classList.add('half');
+
+        lblLeft.textContent  = `${active} empréstimo(s) ativo(s)`;
+        lblRight.innerHTML   = `<strong>${active} / ${limitPerReader}</strong>`;
+    });
+
+    /* ── Book select → availability pill ────────── */
+    document.getElementById('id_livro').addEventListener('change', function () {
+        const id  = parseInt(this.value, 10);
+        const pill = document.getElementById('book-status');
+        const txt  = document.getElementById('book-status-text');
+
+        if (!id) {
+            pill.classList.remove('visible', 'available', 'warning', 'unavailable');
+            return;
         }
-    }
 
-    document.getElementById('id_leitor').addEventListener('change', atualizarInfo);
-    document.getElementById('id_livro').addEventListener('change', atualizarInfo);
+        const qty = bookQuantities[id] ?? 0;
+        pill.classList.remove('available', 'warning', 'unavailable');
+        pill.classList.add('visible');
 
-    atualizarInfo();
+        if (qty === 0) {
+            pill.classList.add('unavailable');
+            txt.textContent = 'Sem exemplares disponíveis';
+        } else if (qty <= 2) {
+            pill.classList.add('warning');
+            txt.textContent = `Último${qty > 1 ? 's' : ''} ${qty} exemplar${qty > 1 ? 'es' : ''} disponível`;
+        } else {
+            pill.classList.add('available');
+            txt.textContent = `${qty} exemplares disponíveis`;
+        }
+    });
+
+    /* ── Duration quick tags ─────────────────────── */
+    const input = document.getElementById('dias_duracao');
+    document.querySelectorAll('.duration-tag').forEach(tag => {
+        tag.addEventListener('click', function () {
+            document.querySelectorAll('.duration-tag').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            input.value = this.dataset.days;
+        });
+    });
+
+    input.addEventListener('input', function () {
+        document.querySelectorAll('.duration-tag').forEach(t => {
+            t.classList.toggle('active', parseInt(t.dataset.days) === parseInt(this.value));
+        });
+    });
 </script>
 </body>
 </html>
